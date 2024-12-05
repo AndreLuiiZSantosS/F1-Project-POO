@@ -3,7 +3,7 @@ def exibir_menu_principal(dados):
         print("\n✓ Menu Principal")
         print("1. Visualizar etapas")
         print("2. Visualizar estatísticas")
-        print("3. Sair")
+        print("3. Voltar ao Login")
         opcao = input("Selecione uma opção: ")
 
         if opcao == "1":
@@ -13,7 +13,6 @@ def exibir_menu_principal(dados):
             from src.estatisticas import menu_estatisticas
             menu_estatisticas(dados)
         elif opcao == "3":
-            print("Saindo...")
-            break
+            return  # Volta ao login
         else:
             print("Opção inválida. Tente novamente.")

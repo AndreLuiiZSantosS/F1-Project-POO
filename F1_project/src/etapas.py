@@ -1,20 +1,27 @@
 def menu_etapas(dados):
     etapas = dados.get("etapas", [])
-    if not etapas:
-        print("Nenhuma etapa cadastrada.")
-        return
+    while True:
+        if not etapas:
+            print("\nNenhuma etapa cadastrada.")
+            print("1. Voltar")
+            opcao = input("Selecione uma opção: ")
 
-    print("\n✓ Visualizar Etapas")
-    for idx, etapa in enumerate(etapas, 1):
-        print(f"{idx}. {etapa['nome']} - {etapa['data']}")
+            if opcao == "1":
+                return  # Volta ao menu principal
+            else:
+                print("Opção inválida. Tente novamente.")
+        else:
+            print("\n✓ Etapas Cadastradas:")
+            for idx, etapa in enumerate(etapas, 1):
+                print(f"{idx}. {etapa['nome']} - {etapa['data']}")
+            print(f"{len(etapas) + 1}. Voltar")
 
-    opcao = input("\nSelecione uma etapa para ver detalhes ou 'voltar': ")
-    if opcao.isdigit() and 1 <= int(opcao) <= len(etapas):
-        exibir_detalhes_etapa(etapas[int(opcao) - 1])
-    elif opcao.lower() == "voltar":
-        return
-    else:
-        print("Opção inválida. Tente novamente.")
+            opcao = input("Selecione uma opção: ")
+
+            if opcao == str(len(etapas) + 1):
+                return  # Volta ao menu principal
+            else:
+                print("Opção inválida. Tente novamente.")
 
 def exibir_detalhes_etapa(etapa):
     print(f"\nDetalhes da Etapa: {etapa['nome']}")

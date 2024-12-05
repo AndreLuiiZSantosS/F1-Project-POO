@@ -3,7 +3,7 @@ def exibir_menu_admin(dados):
         print("\n✓ Menu Admin")
         print("1. Editar etapas")
         print("2. Editar estatísticas")
-        print("3. Voltar")
+        print("3. Voltar ao Login")
         opcao = input("Selecione uma opção: ")
 
         if opcao == "1":
@@ -13,6 +13,6 @@ def exibir_menu_admin(dados):
             from src.estatisticas import menu_admin_estatisticas
             menu_admin_estatisticas(dados)
         elif opcao == "3":
-            break
+            return  # Volta à tela de login
         else:
             print("Opção inválida. Tente novamente.")

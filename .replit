@@ -1,8 +1,6 @@
 modules = ["python-3.12"]
-run = "python3 F1_project/src/menu_principal.py"
-
+run = "python3 -m src.main"
 [nix]
 channel = "stable-24_05"
-
 [deployment]
-run = ["python3 F1_project/src/menu_principal.py"]
+run = ["python3 -m src.main"]
