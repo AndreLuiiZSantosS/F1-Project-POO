@@ -4,23 +4,17 @@ from src.banco_de_dados import carregar_dados, salvar_dados
 
 # Função de login
 def login():
-    while True:
-        print("=== Tela de Login ===")
-        print("0. Encerrar programa")
-        username = input("Usuário: ")
-        if username == "0":
-            print("Programa encerrado.")
-            exit()  # Encerra o programa
-        password = input("Senha: ")
+    print("=== Tela de Login ===")
+    username = input("Usuário: ")
+    password = input("Senha: ")
 
-        if username == "admin" and password == "admin":
-            return "admin"
-        elif username == "user" and password == "user":
-            return "user"
-        else:
-            print("Usuário ou senha incorretos. Tente novamente.")
+    if username == "admin" and password == "admin":
+        return "admin"
+    else:
+        return "user"
 
 # Função principal que inicia o programa
+
 def main():
     while True:  # Permite retornar ao login após sair dos menus
         dados = carregar_dados()
