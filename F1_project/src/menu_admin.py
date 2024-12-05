@@ -7,10 +7,10 @@ def exibir_menu_admin(dados):
         opcao = input("Selecione uma opção: ")
 
         if opcao == "1":
-            from src.etapas import menu_admin_etapas
+            from etapas import menu_admin_etapas
             menu_admin_etapas(dados)
         elif opcao == "2":
-            from src.estatisticas import menu_admin_estatisticas
+            from estatisticas import menu_admin_estatisticas
             menu_admin_estatisticas(dados)
         elif opcao == "3":
             return  # Volta à tela de login

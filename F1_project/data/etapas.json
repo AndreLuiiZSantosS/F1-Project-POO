@@ -1,1 +1,13 @@
-[]
+{
+    "pilotos": [],
+    "resultados": [],
+    "etapas": [
+        {
+            "nome": "GP Da Australia",
+            "data": "22/03/2024 a 24/03/2024",
+            "resultados": []
+        }
+    ],
+    "construtores": [],
+    "estatisticas": []
+}

@@ -1,23 +1,37 @@
 import json
-import os
 
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-DATA_DIR = os.path.join(BASE_DIR, 'data')
+# Definindo o caminho do banco de dados
+CAMINHO_BANCO_DE_DADOS = "dados.json"
 
 def carregar_dados():
-    dados = {}
-    arquivos = ["etapas.json", "pilotos.json", "resultados.json", "construtores.json"]
-    for arquivo in arquivos:
-        caminho = os.path.join(DATA_DIR, arquivo)
-        if os.path.exists(caminho):
-            with open(caminho, 'r') as f:
-                dados[arquivo.split('.')[0]] = json.load(f)
-        else:
-            dados[arquivo.split('.')[0]] = []
-    return dados
+    """Carrega os dados do banco de dados JSON."""
+    try:
+        with open(CAMINHO_BANCO_DE_DADOS, 'r') as arquivo:
+            return json.load(arquivo)
+    except FileNotFoundError:
+        print("Banco de dados não encontrado. Um novo arquivo será criado.")
+        return {
+            "pilotos": [],
+            "resultados": [],
+            "etapas": [],
+              "construtores": [],
+                "estatisticas": [] 
+        }
+    except json.JSONDecodeError:
+        print("Erro ao decodificar o banco de dados. Inicializando banco vazio.")
+        return {
+            "pilotos": [],
+            "resultados": [],
+            "etapas": [],
+            "construtores": [],
+                "estatisticas": [] 
+        }
 
 def salvar_dados(dados):
-    for nome, conteudo in dados.items():
-        caminho = os.path.join(DATA_DIR, f"{nome}.json")
-        with open(caminho, 'w') as f:
-            json.dump(conteudo, f, indent=4)
+    """Salva os dados no banco de dados JSON."""
+    try:
+        with open(CAMINHO_BANCO_DE_DADOS, 'w') as arquivo:
+            json.dump(dados, arquivo, indent=4)
+            print("Dados salvos com sucesso.")
+    except Exception as e:
+        print(f"Erro ao salvar os dados: {e}")

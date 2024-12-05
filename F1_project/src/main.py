@@ -1,6 +1,6 @@
-from src.menu_principal import exibir_menu_principal
-from src.menu_admin import exibir_menu_admin
-from src.banco_de_dados import carregar_dados, salvar_dados
+from menu_principal import exibir_menu_principal
+from menu_admin import exibir_menu_admin
+from banco_de_dados import carregar_dados, salvar_dados
 
 # Função de login
 def login():

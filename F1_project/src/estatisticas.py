@@ -1,3 +1,6 @@
+from resultados import adicionar_resultado
+
+
 def exibir_estatisticas_pilotos(dados):
     """Exibe o ranking dos pilotos com base nos resultados."""
     pilotos = dados.get("pilotos", [])
