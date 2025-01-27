@@ -1,4 +1,4 @@
-def exibir_menu_principal(dados):
+def exibir_menu_principal():
     while True:
         print("\n✓ Menu Principal")
         print("1. Visualizar etapas")
@@ -8,10 +8,10 @@ def exibir_menu_principal(dados):
 
         if opcao == "1":
             from etapas import menu_etapas
-            menu_etapas(dados)
+            menu_etapas()  # Cada módulo lida com seus próprios dados
         elif opcao == "2":
             from estatisticas import menu_estatisticas
-            menu_estatisticas(dados)
+            menu_estatisticas()  # Cada módulo lida com seus próprios dados
         elif opcao == "3":
             return  # Volta ao login
         else:

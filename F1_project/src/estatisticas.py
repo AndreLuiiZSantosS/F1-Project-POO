@@ -1,10 +1,24 @@
-from resultados import adicionar_resultado
+import json
 
+# Caminho do banco de dados de pilotos e resultados
+CAMINHO_BD_PILOTOS = "data/pilotos.json"
+CAMINHO_BD_RESULTADOS = "data/resultados.json"
 
-def exibir_estatisticas_pilotos(dados):
+def carregar_dados(caminho):
+    """Carrega dados de um arquivo JSON."""
+    try:
+        with open(caminho, "r") as arquivo:
+            return json.load(arquivo)
+    except FileNotFoundError:
+        return []
+    except json.JSONDecodeError:
+        print(f"Erro ao carregar o arquivo {caminho}.")
+        return []
+
+def exibir_estatisticas_pilotos():
     """Exibe o ranking dos pilotos com base nos resultados."""
-    pilotos = dados.get("pilotos", [])
-    resultados = dados.get("resultados", [])
+    pilotos = carregar_dados(CAMINHO_BD_PILOTOS)
+    resultados = carregar_dados(CAMINHO_BD_RESULTADOS)
 
     pontuacao_pilotos = {piloto["nome"]: 0 for piloto in pilotos}
 
@@ -25,10 +39,10 @@ def exibir_estatisticas_pilotos(dados):
     while input("Selecione uma opção: ") != "1":
         print("Opção inválida. Tente novamente.")
 
-def exibir_estatisticas_construtores(dados):
+def exibir_estatisticas_construtores():
     """Exibe o ranking das equipes com base nos resultados."""
-    pilotos = dados.get("pilotos", [])
-    resultados = dados.get("resultados", [])
+    pilotos = carregar_dados(CAMINHO_BD_PILOTOS)
+    resultados = carregar_dados(CAMINHO_BD_RESULTADOS)
 
     equipe_pontos = {}
     for piloto in pilotos:
@@ -52,7 +66,7 @@ def exibir_estatisticas_construtores(dados):
     while input("Selecione uma opção: ") != "1":
         print("Opção inválida. Tente novamente.")
 
-def menu_estatisticas(dados):
+def menu_estatisticas():
     """Exibe o menu de estatísticas do campeonato."""
     while True:
         print("\n✓ Estatísticas do Campeonato")
@@ -63,30 +77,11 @@ def menu_estatisticas(dados):
         opcao = input("Selecione uma opção: ")
 
         if opcao == "1":
-            exibir_estatisticas_pilotos(dados)
+            exibir_estatisticas_pilotos()
         elif opcao == "2":
-            exibir_estatisticas_construtores(dados)
+            exibir_estatisticas_construtores()
         elif opcao == "3":
             return
-        else:
-            print("Opção inválida. Tente novamente.")
-
-def menu_admin_estatisticas(dados):
-    """Menu administrativo para editar estatísticas."""
-    while True:
-        print("\n✓ Editar Estatísticas")
-        print("1. Adicionar resultado do campeonato de pilotos")
-        print("2. Adicionar resultado do campeonato de construtores")
-        print("3. Voltar")
-
-        opcao = input("Selecione uma opção: ")
-
-        if opcao == "1":
-            adicionar_resultado(dados)  # Reutilizamos função de 'resultados.py'
-        elif opcao == "2":
-            adicionar_resultado(dados)  # Reutilizamos função de 'resultados.py'
-        elif opcao == "3":
-            break
         else:
             print("Opção inválida. Tente novamente.")
 
