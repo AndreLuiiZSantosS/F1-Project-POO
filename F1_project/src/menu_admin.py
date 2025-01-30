@@ -1,4 +1,4 @@
-def menu_admin():
+def exibir_menu_admin():
     while True:
         print("\n===== Menu Administrador =====")
         print("1. Gerenciar Etapas")
