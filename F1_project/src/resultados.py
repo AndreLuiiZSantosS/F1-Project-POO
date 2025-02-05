@@ -1,7 +1,7 @@
 import json
 
 # Caminho do banco de dados de resultados
-CAMINHO_BD_RESULTADOS = "data/resultados.json"
+CAMINHO_BD_RESULTADOS = "../data/resultados.json"
 
 def carregar_resultados():
     """Carrega os dados de resultados do arquivo JSON."""
@@ -30,17 +30,23 @@ def listar_resultados():
         print("Nenhum resultado cadastrado.")
         return
     print("\n✓ Resultados Registrados:")
-    for resultado in resultados:
-        print(f"- {resultado['etapa']} | {resultado['piloto']} ({resultado['equipe']}): {resultado['posicao']}")
+    for i, resultado in enumerate(resultados, start=1):
+        print(f"{i}. {resultado['etapa']} | {resultado['piloto']} ({resultado['equipe']}): P{resultado['posicao']}")
 
 def adicionar_resultado():
     """Adiciona um novo resultado ao banco de dados."""
     dados = carregar_resultados()
-    resultados = dados.get("resultados", [])
     etapa = input("Nome da etapa: ")
     piloto = input("Nome do piloto: ")
     equipe = input("Nome da equipe: ")
-    posicao = input("Posição do piloto: ")
-    resultados.append({"etapa": etapa, "piloto": piloto, "equipe": equipe, "posicao": posicao})
+    
+    while True:
+        try:
+            posicao = int(input("Posição do piloto (número inteiro): "))
+            break
+        except ValueError:
+            print("Erro: Digite um número inteiro válido para a posição.")
+    
+    dados["resultados"].append({"etapa": etapa, "piloto": piloto, "equipe": equipe, "posicao": posicao})
     salvar_resultados(dados)
     print("Resultado adicionado com sucesso!")

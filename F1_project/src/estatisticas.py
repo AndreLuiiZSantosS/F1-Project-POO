@@ -1,8 +1,8 @@
 import json
 
 # Caminho do banco de dados de pilotos e resultados
-CAMINHO_BD_PILOTOS = "data/pilotos.json"
-CAMINHO_BD_RESULTADOS = "data/resultados.json"
+CAMINHO_BD_PILOTOS = "../data/pilotos.json"
+CAMINHO_BD_RESULTADOS = "../data/resultados.json"
 
 def carregar_dados(caminho):
     """Carrega dados de um arquivo JSON."""
@@ -10,61 +10,65 @@ def carregar_dados(caminho):
         with open(caminho, "r") as arquivo:
             return json.load(arquivo)
     except FileNotFoundError:
-        return []
+        return {"pilotos": []} if "pilotos" in caminho else {"resultados": []}
     except json.JSONDecodeError:
         print(f"Erro ao carregar o arquivo {caminho}.")
-        return []
+        return {"pilotos": []} if "pilotos" in caminho else {"resultados": []}
 
 def exibir_estatisticas_pilotos():
     """Exibe o ranking dos pilotos com base nos resultados."""
-    pilotos = carregar_dados(CAMINHO_BD_PILOTOS)
-    resultados = carregar_dados(CAMINHO_BD_RESULTADOS)
+    pilotos = carregar_dados(CAMINHO_BD_PILOTOS)["pilotos"]
+    resultados = carregar_dados(CAMINHO_BD_RESULTADOS)["resultados"]
 
-    pontuacao_pilotos = {piloto["nome"]: 0 for piloto in pilotos}
+    pontuacao_pilotos = {}
 
     for resultado in resultados:
+        piloto = resultado["piloto"]
         pontos = calcular_pontos(int(resultado["posicao"]))
-        pontuacao_pilotos[resultado["piloto"]] += pontos
+        pontuacao_pilotos[piloto] = pontuacao_pilotos.get(piloto, 0) + pontos
 
     ranking = sorted(pontuacao_pilotos.items(), key=lambda x: x[1], reverse=True)
 
+    print("\n" + "="*30)
+    print("✓ Campeonato de Pilotos")
+    print("="*30)
+
     if not ranking:
-        print("\nNenhum piloto registrado no campeonato.")
+        print("Nenhum piloto registrado no campeonato.")
     else:
-        print("\n✓ Ranking de Pilotos:")
         for idx, (piloto, pontos) in enumerate(ranking, 1):
             print(f"{idx}. {piloto} - {pontos} pontos")
 
-    print("\n1. Voltar")
-    while input("Selecione uma opção: ") != "1":
-        print("Opção inválida. Tente novamente.")
+    input("\nPressione Enter para voltar...")
 
 def exibir_estatisticas_construtores():
     """Exibe o ranking das equipes com base nos resultados."""
-    pilotos = carregar_dados(CAMINHO_BD_PILOTOS)
-    resultados = carregar_dados(CAMINHO_BD_RESULTADOS)
+    pilotos = carregar_dados(CAMINHO_BD_PILOTOS)["pilotos"]
+    resultados = carregar_dados(CAMINHO_BD_RESULTADOS)["resultados"]
 
     equipe_pontos = {}
-    for piloto in pilotos:
-        equipe_pontos.setdefault(piloto["equipe"], 0)
 
     for resultado in resultados:
-        pontos = calcular_pontos(int(resultado["posicao"]))
-        equipe = next(p["equipe"] for p in pilotos if p["nome"] == resultado["piloto"])
-        equipe_pontos[equipe] += pontos
+        piloto_nome = resultado["piloto"]
+        equipe = next((p["equipe"] for p in pilotos if p["nome"] == piloto_nome), None)
+
+        if equipe:
+            pontos = calcular_pontos(int(resultado["posicao"]))
+            equipe_pontos[equipe] = equipe_pontos.get(equipe, 0) + pontos
 
     ranking = sorted(equipe_pontos.items(), key=lambda x: x[1], reverse=True)
 
+    print("\n" + "="*30)
+    print("✓ Campeonato de Construtores")
+    print("="*30)
+
     if not ranking:
-        print("\nNenhuma equipe registrada no campeonato.")
+        print("Nenhuma equipe registrada no campeonato.")
     else:
-        print("\n✓ Ranking de Construtores:")
         for idx, (equipe, pontos) in enumerate(ranking, 1):
             print(f"{idx}. {equipe} - {pontos} pontos")
 
-    print("\n1. Voltar")
-    while input("Selecione uma opção: ") != "1":
-        print("Opção inválida. Tente novamente.")
+    input("\nPressione Enter para voltar...")
 
 def menu_estatisticas():
     """Exibe o menu de estatísticas do campeonato."""

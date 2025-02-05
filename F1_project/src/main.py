@@ -1,22 +1,37 @@
 from menu_principal import exibir_menu_principal
 from menu_admin import exibir_menu_admin
 
-# Função de login
 def login():
-    print("=== Tela de Login ===")
-    username = input("Usuário: ")
-    password = input("Senha: ")
+    """Função de login com credenciais básicas."""
+    print("\n=== Tela de Login ===")
+    print("Digite 'sair' a qualquer momento para encerrar o programa.")
 
-    if username == "admin" and password == "admin":
-        return "admin"
-    else:
-        return "user"
+    while True:
+        username = input("Usuário: ").strip()
+        if username.lower() == "sair":
+            print("Encerrando o programa...")
+            exit()
 
-# Função principal que inicia o programa
+        password = input("Senha: ").strip()
+        if password.lower() == "sair":
+            print("Encerrando o programa...")
+            exit()
+
+        if username and password:
+            if username == "admin" and password == "admin":
+                print("\nLogin bem-sucedido! Acessando painel administrativo...")
+                return "admin"
+            else:
+                print("\nLogin como usuário comum.")
+                return "user"
+        else:
+            print("Usuário e senha não podem estar vazios. Tente novamente.")
+
 def main():
-    while True:  # Permite retornar ao login após sair dos menus
+    """Função principal que inicia o programa."""
+    while True:
         usuario = login()
-        
+
         if usuario == "admin":
             exibir_menu_admin()
         else:
@@ -26,4 +41,10 @@ if __name__ == "__main__":
     try:
         main()
     except Exception as e:
-        print(f"Erro detectado: {e}")
+        print(f"\nErro detectado: {e}")
+        opcao = input("Deseja reiniciar o programa? (S/N): ").strip().lower()
+        if opcao == "s":
+            main()
+        else:
+            print("Encerrando o programa.")
+            exit()

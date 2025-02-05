@@ -1,1 +1,184 @@
-[]
+{
+    "pilotos": [
+        {
+            "nome": "Max Verstappen",
+            "equipe": "Red Bull Racing",
+            "pontuacao": "437"
+        },
+        {
+            "nome": "Sergio P\u00e9rez",
+            "equipe": "Red Bull Racing",
+            "pontuacao": 0
+        },
+        {
+            "nome": "Liam Lawson",
+            "equipe": "Red Bull Racing",
+            "pontuacao": 0
+        },
+        {
+            "nome": "Lewis Hamilton",
+            "equipe": "Mercedes",
+            "pontuacao": 0
+        },
+        {
+            "nome": "George Russell",
+            "equipe": "Mercedes",
+            "pontuacao": 0
+        },
+        {
+            "nome": "Mick Schumacher",
+            "equipe": "Mercedes",
+            "pontuacao": 0
+        },
+        {
+            "nome": "Frederik Vesti",
+            "equipe": "Mercedes",
+            "pontuacao": 0
+        },
+        {
+            "nome": "Charles Leclerc",
+            "equipe": "Ferrari",
+            "pontuacao": 0
+        },
+        {
+            "nome": "Carlos Sainz",
+            "equipe": "Ferrari",
+            "pontuacao": 0
+        },
+        {
+            "nome": "Antonio Giovinazzi",
+            "equipe": "Ferrari",
+            "pontuacao": 0
+        },
+        {
+            "nome": "Robert Shwartzman",
+            "equipe": "Ferrari",
+            "pontuacao": 0
+        },
+        {
+            "nome": "Oliver Bearman",
+            "equipe": "Ferrari",
+            "pontuacao": 0
+        },
+        {
+            "nome": "Lando Norris",
+            "equipe": "McLaren",
+            "pontuacao": 0
+        },
+        {
+            "nome": "Oscar Piastri",
+            "equipe": "McLaren",
+            "pontuacao": 0
+        },
+        {
+            "nome": "Pato O'Ward",
+            "equipe": "McLaren",
+            "pontuacao": 0
+        },
+        {
+            "nome": "Ryo Hirakawa",
+            "equipe": "McLaren",
+            "pontuacao": 0
+        },
+        {
+            "nome": "Fernando Alonso",
+            "equipe": "Aston Martin",
+            "pontuacao": 0
+        },
+        {
+            "nome": "Lance Stroll",
+            "equipe": "Aston Martin",
+            "pontuacao": 0
+        },
+        {
+            "nome": "Felipe Drugovich",
+            "equipe": "Aston Martin",
+            "pontuacao": 0
+        },
+        {
+            "nome": "Esteban Ocon",
+            "equipe": "Alpine",
+            "pontuacao": 0
+        },
+        {
+            "nome": "Pierre Gasly",
+            "equipe": "Alpine",
+            "pontuacao": 0
+        },
+        {
+            "nome": "Jack Doohan",
+            "equipe": "Alpine",
+            "pontuacao": 0
+        },
+        {
+            "nome": "Valtteri Bottas",
+            "equipe": "Alfa Romeo",
+            "pontuacao": 0
+        },
+        {
+            "nome": "Guanyu Zhou",
+            "equipe": "Alfa Romeo",
+            "pontuacao": 0
+        },
+        {
+            "nome": "Theo Pourchaire",
+            "equipe": "Alfa Romeo",
+            "pontuacao": 0
+        },
+        {
+            "nome": "Zane Maloney",
+            "equipe": "Alfa Romeo",
+            "pontuacao": 0
+        },
+        {
+            "nome": "Kevin Magnussen",
+            "equipe": "Haas",
+            "pontuacao": 0
+        },
+        {
+            "nome": "Nico H\u00fclkenberg",
+            "equipe": "Haas",
+            "pontuacao": 0
+        },
+        {
+            "nome": "Pietro Fittipaldi",
+            "equipe": "Haas",
+            "pontuacao": 0
+        },
+        {
+            "nome": "Oliver Bearman",
+            "equipe": "Haas",
+            "pontuacao": 0
+        },
+        {
+            "nome": "Alexander Albon",
+            "equipe": "Williams",
+            "pontuacao": 0
+        },
+        {
+            "nome": "Logan Sargeant",
+            "equipe": "Williams",
+            "pontuacao": 0
+        },
+        {
+            "nome": "Mick Schumacher",
+            "equipe": "Williams",
+            "pontuacao": 0
+        },
+        {
+            "nome": "Yuki Tsunoda",
+            "equipe": "AlphaTauri",
+            "pontuacao": 0
+        },
+        {
+            "nome": "Daniel Ricciardo",
+            "equipe": "AlphaTauri",
+            "pontuacao": 0
+        },
+        {
+            "nome": "Liam Lawson",
+            "equipe": "AlphaTauri",
+            "pontuacao": 0
+        }
+    ]
+}

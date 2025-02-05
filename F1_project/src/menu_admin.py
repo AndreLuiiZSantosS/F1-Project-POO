@@ -1,29 +1,28 @@
-from menu_principal import exibir_menu_principal
-from menu_admin import exibir_menu_admin
+def exibir_menu_admin():
+    while True:
+        print("\n=== Menu do Administrador ===")
+        print("1. Gerenciar Etapas")
+        print("2. Gerenciar Pilotos")
+        print("3. Gerenciar Resultados")
+        print("4. Gerenciar Vendas")
+        print("5. Sair")
 
-# Função de login
-def login():
-    print("=== Tela de Login ===")
-    username = input("Usuário: ")
-    password = input("Senha: ")
+        opcao = input("Escolha uma opção: ")
 
-    if username == "admin" and password == "admin":
-        return "admin"
-    else:
-        return "user"
-
-# Função principal que inicia o programa
-def main():
-    while True:  # Permite retornar ao login após sair dos menus
-        usuario = login()
-        
-        if usuario == "admin":
-            exibir_menu_admin()
+        if opcao == "1":
+            from etapas import menu_admin_etapas
+            menu_admin_etapas()
+        elif opcao == "2":
+            from pilotos import menu_admin_pilotos
+            menu_admin_pilotos()
+        elif opcao == "3":
+            from resultados import menu_admin_resultados
+            menu_admin_resultados()
+        elif opcao == "4":
+            from vendas import menu_admin_vendas
+            menu_admin_vendas()
+        elif opcao == "5":
+            print("Saindo do menu administrativo.")
+            break
         else:
-            exibir_menu_principal()
-
-if __name__ == "__main__":
-    try:
-        main()
-    except Exception as e:
-        print(f"Erro detectado: {e}")
+            print("Opção inválida. Tente novamente.")
