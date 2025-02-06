@@ -1,3 +1,5 @@
+from models.piloto import Piloto, Pilotos
+
 def exibir_menu_admin():
     while True:
         print("\n===== Menu Administrador =====")
@@ -13,7 +15,7 @@ def exibir_menu_admin():
         if opcao == "1":
             menu_admin_etapas()
         elif opcao == "2":
-            menu_admin_pilotos()
+            Pilotos.menu_admin_pilotos()
         elif opcao == "3":
             menu_admin_resultados()
         elif opcao == "4":

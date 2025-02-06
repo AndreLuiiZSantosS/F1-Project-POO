@@ -179,6 +179,11 @@
             "nome": "Liam Lawson",
             "equipe": "AlphaTauri",
             "pontuacao": 0
+        },
+        {
+            "nome": "daniel Braga",
+            "equipe": "IFRN",
+            "pontuacao": "24"
         }
     ]
 }
