@@ -1,22 +1,29 @@
-def exibir_menu_principal():
-    while True:
-        print("\n✓ Menu Principal")
-        print("1. Visualizar etapas")
-        print("2. Visualizar estatísticas")
-        print("3. Comprar ingressos")
-        print("4. Voltar ao Login")
-        opcao = input("Selecione uma opção: ")
+from estatisticas import MenuEstatisticas
+from vendas import MenuVendas
+from etapas import MenuEtapas
 
-        if opcao == "1":
-            from etapas import menu_etapas
-            menu_etapas()  # Cada módulo lida com seus próprios dados
-        elif opcao == "2":
-            from estatisticas import menu_estatisticas
-            menu_estatisticas()  # Cada módulo lida com seus próprios dados
-        elif opcao == "3":
-            from vendas import menu_vendas_usuario
-            menu_vendas_usuario()  # Cada módulo lida com seus próprios dados
-        elif opcao == "4":
-            return  # Volta ao login
-        else:
-            print("Opção inválida. Tente novamente.")
+class MenuPrincipal:
+    """Menu principal para usuários comuns."""
+
+    @staticmethod
+    def exibir():
+        """Exibe o menu principal para usuários comuns."""
+        while True:
+            print("\n=== Menu do Usuário ===")
+            print("1. Visualizar Etapas")
+            print("2. Visualizar Estatísticas")
+            print("3. Comprar Ingressos")
+            print("4. Voltar ao Login")
+
+            opcao = input("Selecione uma opção: ")
+
+            if opcao == "1":
+                MenuEtapas.exibir()  # Usa a classe MenuEtapas
+            elif opcao == "2":
+                MenuEstatisticas.exibir()  # Usa a classe MenuEstatisticas
+            elif opcao == "3":
+                MenuVendas.menu_vendas_usuario()  # Usa a classe MenuVendas
+            elif opcao == "4":
+                return  # Volta ao login
+            else:
+                print("Opção inválida. Tente novamente.")
