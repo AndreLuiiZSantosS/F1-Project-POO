@@ -1,6 +1,6 @@
-from estatisticas import MenuEstatisticas
-from vendas import MenuVendas
-from etapas import MenuEtapas
+from modules.estatisticas import MenuEstatisticas
+from modules.vendas import MenuVendas
+from models.etapas import Etapas
 
 class MenuPrincipal:
     """Menu principal para usuários comuns."""
@@ -18,7 +18,7 @@ class MenuPrincipal:
             opcao = input("Selecione uma opção: ")
 
             if opcao == "1":
-                MenuEtapas.exibir()  # Usa a classe MenuEtapas
+                Etapas.menu_etapas()  # Usa a classe MenuEtapas
             elif opcao == "2":
                 MenuEstatisticas.exibir()  # Usa a classe MenuEstatisticas
             elif opcao == "3":
