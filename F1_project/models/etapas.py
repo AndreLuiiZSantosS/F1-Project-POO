@@ -14,32 +14,31 @@ class Etapa:
 
 class Etapas:
     objetos = []
-    CAMINHO_BD = "../data/etapas.json"  # Caminho do banco de dados
 
     @classmethod
     def carregar_etapas(cls):
         """Carrega as etapas do arquivo JSON."""
         cls.objetos = []
         try:
-            with open(cls.CAMINHO_BD, mode="r") as arquivo:
+            with open("etapas.json", mode="r") as arquivo:
                 objetos_json = json.load(arquivo)
                 for obj in objetos_json:
                     e = Etapa(obj["id"], obj["nome"], obj["data"], obj["pista"])
                     cls.objetos.append(e)
         except FileNotFoundError:
-            print(f"Arquivo '{cls.CAMINHO_BD}' não encontrado. Criando um novo...")
+            print(f"Arquivo '{"etapas.json"}' não encontrado. Criando um novo...")
             # Cria o diretório "../data" se ele não existir
-            os.makedirs(os.path.dirname(cls.CAMINHO_BD), exist_ok=True)
+            os.makedirs(os.path.dirname("etapas.json"), exist_ok=True)
             # Cria o arquivo com uma lista vazia
-            with open(cls.CAMINHO_BD, mode="w") as arquivo:
+            with open("etapas.json", mode="w") as arquivo:
                 json.dump([], arquivo)
         except json.JSONDecodeError:
-            print(f"Erro ao decodificar o arquivo '{cls.CAMINHO_BD}'.")
+            print(f"Erro ao decodificar o arquivo '{"etapas.json"}'.")
 
     @classmethod
     def salvar_etapas(cls):
         """Salva as etapas no arquivo JSON."""
-        with open(cls.CAMINHO_BD, mode="w") as arquivo:
+        with open("etapas.json", mode="w") as arquivo:
             json.dump([vars(e) for e in cls.objetos], arquivo, indent=4)
 
     @classmethod

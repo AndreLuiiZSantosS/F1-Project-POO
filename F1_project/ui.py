@@ -1,28 +1,43 @@
 from views import View
-from modules.menu_admin import MenuAdmin
-from etapas import Etapas  
+from models.etapas import Etapas  
 
 class UI:
     # Dados do usuário logado
     piloto_id = 0
     piloto_nome = ""
+    is_admin = False
 
     @staticmethod
+    def login():
+        """Método para realizar o login."""
+        username = input("Digite o nome de usuário: ")
+        password = input("Digite a senha: ")
+
+        if username == "admin" and password == "admin":
+            UI.is_admin = True
+            print("Login como administrador realizado com sucesso!")
+        else:
+            UI.is_admin = False
+            print("Login como usuário comum realizado com sucesso.")
+    
+    @staticmethod
     def menu():
-        print("\n===== Menu Administrador =====")
-        print("1. Gerenciar Etapas")
-        print("2. Adicionar Pilotos")
-        print("3. Listar Pilotos")
-        print("4. Editar Pilotos")
-        print("5. Excluir Pilotos")
-        print("6. Gerenciar Resultados")
-        print("7. Gerenciar Estatísticas")
-        print("8. Gerenciar Vendas")
-        print("9. Sair")
+        """Exibe o menu organizado horizontalmente por categorias."""
+        print("\n===== Menu Principal =====")
+        print("Categorias: Pilotos | Etapas | Resultados | Estatísticas | Vendas | Sair")
+        print("-------------------------------------------------------------")
+        
+        if UI.is_admin:
+            print("1. Gerenciar etapas")
+            print("2. adicionar Pilotos       3. Listar Pilotos        4. Editar Piloto         5. Excluir Piloto")
+            print("7. Gerenciar Estatísticas 8. Gerenciar Vendas      9. Sair")
+        else:
+            print("1. Listar Pilotos        9. Sair")
         return int(input("Informe uma opção: "))
 
     @staticmethod
     def main():
+        UI.login()
         op = 0
         while op != 9:  
             op = UI.menu()

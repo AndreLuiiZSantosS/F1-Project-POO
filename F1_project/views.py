@@ -1,5 +1,5 @@
 from models.piloto import Piloto, Pilotos
-from etapas import Etapas  
+from models.etapas import Etapas  
 
 class View:
     @staticmethod
