@@ -23,6 +23,7 @@ class MenuAdmin:
 
             if opcao == "1":
                 Etapas.menu_admin_etapas()  # Usa a classe MenuEtapas
+                Etapas.menu_admin_etapas()  # Usa a classe MenuEtapas
             elif opcao == "2":
                 Pilotos.menu_admin_pilotos()  # Mantém a chamada original
             elif opcao == "3":

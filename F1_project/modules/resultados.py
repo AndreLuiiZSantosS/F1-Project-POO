@@ -41,6 +41,7 @@ class Resultado:
     def adicionar_resultado():
         """Adiciona um novo resultado ao banco de dados."""
         dados = Resultado.carregar_resultados()
+        id = input("id da etapa")
         etapa = input("Nome da etapa: ")
         piloto = input("Nome do piloto: ")
         equipe = input("Nome da equipe: ")

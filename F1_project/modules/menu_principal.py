@@ -19,6 +19,7 @@ class MenuPrincipal:
 
             if opcao == "1":
                 Etapas.menu_etapas()  # Usa a classe MenuEtapas
+                Etapas.menu_etapas()  # Usa a classe MenuEtapas
             elif opcao == "2":
                 MenuEstatisticas.exibir()  # Usa a classe MenuEstatisticas
             elif opcao == "3":

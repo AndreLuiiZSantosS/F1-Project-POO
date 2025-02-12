@@ -1,6 +1,7 @@
 import json
 class Etapa:
-    def __init__(self, nome, data, pista):
+    def __init__(self, id, nome, data, pista):
+        self.id = id
         self.nome = nome
         self.data = data
         self.pista = pista
@@ -10,30 +11,38 @@ class Etapa:
 
 # Caminho do banco de dados de etapas
 CAMINHO_BD_ETAPAS = "../data/etapas.json"
+
 class Etapas:
-    def carregar_etapas():
+    objetos = []
+    @classmethod
+    def carregar_etapas(cls):
         """Carrega as etapas do arquivo JSON."""
+        cls.objetos = []
         try:
-            with open(CAMINHO_BD_ETAPAS, "r") as arquivo:
-                return json.load(arquivo).get("etapas", [])
+            with open("etapas.json", mode="r") as arquivo:
+                objetos_json = json.load(arquivo)
+                for obj in objetos_json: 
+                    c = Etapa(obj["nome"])
+                    cls.objetos.append(c)
         except FileNotFoundError:
+            print("erro")
             return []
         except json.JSONDecodeError:
             print(f"Erro ao carregar o arquivo {CAMINHO_BD_ETAPAS}.")
             return []
-
-    def salvar_etapas(etapas):
+    @classmethod
+    def salvar_etapas(cls, etapas):
         """Salva as etapas no arquivo JSON."""
         try:
-            with open(CAMINHO_BD_ETAPAS, "w") as arquivo:
+            with open("etapas.json", mode="w") as arquivo:
                 json.dump({"etapas": etapas}, arquivo, indent=4)
         except Exception as e:
             print(f"Erro ao salvar etapas: {e}")
-
-    def menu_etapas():
+    @classmethod
+    def menu_etapas(cls):
         """Exibe o menu de etapas disponíveis (usuário comum)."""
         while True:
-            etapas = carregar_etapas()
+            etapas = cls.carregar_etapas()
 
             print("\n" + "="*30)
             print("✓ Etapas do Campeonato")
@@ -53,14 +62,14 @@ class Etapas:
             if opcao.isdigit():
                 opcao = int(opcao)
                 if 1 <= opcao <= len(etapas):
-                    exibir_detalhes_etapa(etapas[opcao - 1])
+                    cls.exibir_detalhes_etapa(etapas[opcao - 1])
                 elif opcao == len(etapas) + 1:
                     return
                 else:
                     print("Opção inválida. Tente novamente.")
             else:
                 print("Entrada inválida. Digite um número correspondente.")
-
+    @classmethod
     def exibir_detalhes_etapa(etapa):
         """Exibe detalhes de uma etapa específica."""
         print("\n" + "="*30)
@@ -75,8 +84,8 @@ class Etapas:
         input("\nPressione Enter para voltar...")
 
     # ========================= MENU DO ADMINISTRADOR =========================
-
-    def menu_admin_etapas():
+    @classmethod
+    def menu_admin_etapas(cls):
         """Exibe o menu de gerenciamento de etapas para o administrador."""
         while True:
             print("\n=== Gerenciamento de Etapas ===")
@@ -89,33 +98,37 @@ class Etapas:
             opcao = input("Escolha uma opção: ")
 
             if opcao == "1":
-                menu_etapas()
+                cls.listar_etapa()
             elif opcao == "2":
-                adicionar_etapa()
+                cls.adicionar_etapa()
             elif opcao == "3":
-                editar_etapa()
+                cls.editar_etapa()
             elif opcao == "4":
-                remover_etapa()
+                cls.remover_etapa()
             elif opcao == "5":
                 return
             else:
                 print("Opção inválida. Tente novamente.")
-
-    def adicionar_etapa():
+    @classmethod
+    def adicionar_etapa(cls):
         """Adiciona uma nova etapa ao campeonato."""
+        id = 0 
+        for x in cls.obj:
+            if x.id > id: id = x.id
+        
         nome = input("Nome da etapa: ")
         data = input("Data da etapa: ")
         pista = input("pista da etapa: ")
 
-        etapas = carregar_etapas()
+        etapas = cls.carregar_etapas()
         etapas.append({"nome": nome, "data": data, "pista": pista})
 
-        salvar_etapas(etapas)
+        cls.salvar_etapas(etapas)
         print("Etapa adicionada com sucesso!")
-
-    def editar_etapa():
+    @classmethod
+    def editar_etapa(cls):
         """Edita uma etapa existente."""
-        etapas = carregar_etapas()
+        etapas = cls.carregar_etapas()
         if not etapas:
             print("Nenhuma etapa cadastrada.")
             return
@@ -130,14 +143,20 @@ class Etapas:
             etapas[idx]['data'] = input(f"Nova data ({etapas[idx]['data']}): ") or etapas[idx]['data']
             etapas[idx]['pista'] = input(f"Novo pista ({etapas[idx]['pista']}): ") or etapas[idx]['pista']
 
-            salvar_etapas(etapas)
+            cls.salvar_etapas(etapas)
             print("Etapa editada com sucesso!")
         else:
             print("Opção inválida.")
-
-    def remover_etapa():
+            
+    @classmethod
+    def listar_etapa(cls):
+        cls.carregar_etapas()
+        return cls.objetos[:]
+    
+    @classmethod
+    def remover_etapa(cls):
         """Remove uma etapa existente."""
-        etapas = carregar_etapas()
+        etapas = cls.carregar_etapas()
         if not etapas:
             print("Nenhuma etapa cadastrada.")
             return
@@ -148,7 +167,7 @@ class Etapas:
         opcao = input("Selecione a etapa para remover: ")
         if opcao.isdigit() and 1 <= int(opcao) <= len(etapas):
             etapas.pop(int(opcao) - 1)
-            salvar_etapas(etapas)
+            cls.salvar_etapas(etapas)
             print("Etapa removida com sucesso!")
         else:
             print("Opção inválida.")
