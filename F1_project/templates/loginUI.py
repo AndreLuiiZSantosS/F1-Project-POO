@@ -6,9 +6,7 @@ class LoginUI:
         print("Entrar no Sistema")
         usuario = input("Informe o e-mail")
         senha = input("Informe a senha")
-        if st.button("Entrar"):
-            c = View.cliente_autenticar(usuario, senha)
-            if c == None: 
+        if  == None:
                 st.write("E-mail ou senha inválidos")
             else:    
                 st.session_state["cliente_id"] = c["id"]

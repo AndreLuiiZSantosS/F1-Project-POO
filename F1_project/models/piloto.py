@@ -20,7 +20,7 @@ class Pilotos:
          # esvazia a lista de objetos
         cls.objetos = []
         try:
-            with open("clientes.json", mode="r") as arquivo:
+            with open("pilotos.json", mode="r") as arquivo:
                 # abre o arquivo com a lista de dicionários -> clientes_json
                 clientes_json = json.load(arquivo)
                 # percorre a lista de dicionários
@@ -46,6 +46,14 @@ class Pilotos:
         cls.carregar_pilotos()
         # retorna a lista para a UI
         return cls.objetos
+    
+    @classmethod
+    def listar_id(cls, id):
+        cls.carregar_pilotos()
+        # percorre a lista procurando o id    
+        for x in cls.objetos:
+            if x.id == id: return x
+        return None
 
     @classmethod
     def adicionar_piloto(cls, obj):
@@ -70,7 +78,8 @@ class Pilotos:
             #x.nome = obj.nome
             #x.email = obj.email
             #x.fone = obj.fone
-            cls.salvar_pilotos()        
+            cls.salvar_pilotos()     
+    @classmethod   
     def remover_piloto(cls, obj):
         x = cls.listar_id(obj.id)
         if x != None:
