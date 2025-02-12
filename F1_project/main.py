@@ -1,5 +1,5 @@
-from modules.menu_principal import exibir_menu_principal  
-from modules.menu_admin import exibir_menu_admin 
+from modules.menu_principal import MenuPrincipal 
+from modules.menu_admin import MenuAdmin
 
 def login():
     """Função de login com credenciais básicas."""
@@ -33,9 +33,9 @@ def main():
         usuario = login()
 
         if usuario == "admin":
-            exibir_menu_admin()  # Mantém a chamada original
+            MenuAdmin.exibir()  # Mantém a chamada original
         else:
-            exibir_menu_principal()  # Mantém a chamada original
+            MenuPrincipal.exibir()  # Mantém a chamada original
 
 if __name__ == "__main__":
     try:

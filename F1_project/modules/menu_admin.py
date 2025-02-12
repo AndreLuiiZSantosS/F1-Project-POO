@@ -1,8 +1,8 @@
 from models.piloto import Piloto, Pilotos  
-from etapas import MenuEtapas
-from resultados import MenuResultados
-from estatisticas import MenuEstatisticas
-from vendas import MenuVendas
+from modules.etapas import Etapas
+from modules.resultados import MenuResultados
+from modules.estatisticas import MenuEstatisticas
+from modules.vendas import MenuVendas
 
 class MenuAdmin:
     """Menu principal para administradores."""
@@ -22,7 +22,7 @@ class MenuAdmin:
             opcao = input("Escolha uma opção: ")
 
             if opcao == "1":
-                MenuEtapas.exibir()  # Usa a classe MenuEtapas
+                Etapas.menu_admin_etapas()  # Usa a classe MenuEtapas
             elif opcao == "2":
                 Pilotos.menu_admin_pilotos()  # Mantém a chamada original
             elif opcao == "3":
