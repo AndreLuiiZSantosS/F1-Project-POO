@@ -2,16 +2,16 @@ import json
 import os
 
 class Etapa:
-    def __init__(self, id, nome, data, pista):
+    def __init__(self, id, nome, data, pista, ingressos_disponiveis=100):
         self.id = id
         self.nome = nome
         self.data = data
         self.pista = pista
-    
+        self.ingressos_disponiveis = ingressos_disponiveis  # Quantidade de ingressos disponíveis
+
     def __str__(self):
-        return f"{self.id} - {self.nome} - {self.data} - {self.pista}"
-
-
+        return (f"{self.id} - {self.nome} - {self.data} - {self.pista} | "
+                f"Ingressos Disponíveis: {self.ingressos_disponiveis}")
 class Etapas:
     objetos = []
 
