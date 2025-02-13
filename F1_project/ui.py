@@ -1,5 +1,6 @@
 from views import View
 from models.etapas import Etapas  
+from templates.abrircontaUI import AbrircontaUI
 
 class UI:
     # Dados do usuário logado
@@ -12,6 +13,8 @@ class UI:
         """Método para realizar o login."""
         username = input("Digite o nome de usuário: ")
         password = input("Digite a senha: ")
+        
+        autenticado = View.cliente_autenticar(username, password)
 
         if username == "admin" and password == "admin":
             UI.is_admin = True
@@ -19,37 +22,51 @@ class UI:
         else:
             UI.is_admin = False
             print("Login como usuário comum realizado com sucesso.")
+        
+        return autenticado
     
     @staticmethod
     def menu():
-        """Exibe o menu organizado horizontalmente por categorias."""
-        print("\n===== Menu Principal =====")
-        print("Categorias: Pilotos | Etapas | Resultados | Estatísticas | Vendas | Sair")
-        print("-------------------------------------------------------------")
-        
-        if UI.is_admin:
-            print("1. Gerenciar etapas")
-            print("2. adicionar Pilotos       3. Listar Pilotos        4. Editar Piloto         5. Excluir Piloto")
-            print("7. Gerenciar Estatísticas 8. Gerenciar Vendas      9. Sair")
+        if UI.login():
+            """Exibe o menu organizado horizontalmente por categorias."""
+            print("\n===== Menu Principal =====")
+            print("Categorias: Pilotos | Etapas | Resultados | Estatísticas | Vendas | Sair")
+            print("-------------------------------------------------------------")
+            
+            if UI.is_admin:
+                print("1. Gerenciar etapas")
+                print("2. adicionar Pilotos       3. Listar Pilotos        4. Editar Piloto         5. Excluir Piloto")
+                print("7. Gerenciar Estatísticas 8. Gerenciar Vendas      9. Sair")
+            else:
+                print("1. Listar Pilotos        9. Sair")
+            return int(input("Informe uma opção: "))
         else:
-            print("1. Listar Pilotos        9. Sair")
-        return int(input("Informe uma opção: "))
-
+            print("Usuario ou senha errados!")
     @staticmethod
     def main():
+        AbrircontaUI.main()
         UI.login()
-        op = 0
-        while op != 9:  
-            op = UI.menu()
-            if op == 1: UI.gerenciar_etapas()
-            if op == 2: UI.adicionar_pilotos()
-            if op == 3: UI.listar_pilotos()
-            if op == 4: UI.piloto_atualizar()
-            if op == 5: UI.piloto_excluir()
-            if op == 6: UI.gerenciar_resultados()
-            if op == 7: UI.gerenciar_estatisticas()
-            if op == 8: UI.gerenciar_vendas()
-
+        if UI.is_admin:
+            op = 0
+            while op != 9:  
+                op = UI.menu()
+                if op == 1: UI.gerenciar_etapas()
+                if op == 2: UI.adicionar_pilotos()
+                if op == 3: UI.listar_pilotos()
+                if op == 4: UI.piloto_atualizar()
+                if op == 5: UI.piloto_excluir()
+                if op == 6: UI.gerenciar_resultados()
+                if op == 7: UI.gerenciar_estatisticas()
+                if op == 8: UI.gerenciar_vendas()
+        else:
+            op = 0
+            while op != 9:  
+                op = UI.menu()
+                if op == 1: UI.listar_pilotos()
+                if op == 2: UI.listar_etapas()
+               #if op == 3: UI.listar_estatisticas()
+                if op == 4: UI.comprar_ingresso() 
+    
     @classmethod
     def gerenciar_etapas(cls):
         """Exibe o menu de gerenciamento de etapas."""
