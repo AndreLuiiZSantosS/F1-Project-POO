@@ -1,4 +1,4 @@
-from modules.carrinho import Carrinho
+from models.carrinho import carrrinho
 from modules.ingresso import Ingresso
 from models.etapas import Etapas
 from F1_project.models.vendas import Vendas

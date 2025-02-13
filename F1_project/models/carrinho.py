@@ -15,8 +15,6 @@ class Carrinhos:
     def inserir(cls, obj):
         # abre a lista do arquivo
         cls.abrir()
-
-        
         # insere o objeto na lista
         cls.objetos.append(obj)
         # salva a lista no arquivo
@@ -59,7 +57,7 @@ class Carrinhos:
         # esvazia a lista de objetos
         cls.objetos = []
         try:
-            with open("carrinhos.json", mode="r") as arquivo:
+            with open("carrinhos.json", mode="r", encoding="utf-8") as arquivo:
                 # abre o arquivo com a lista de dicionários -> clientes_json
                 objetos_json = json.load(arquivo)
                 # percorre a lista de dicionários

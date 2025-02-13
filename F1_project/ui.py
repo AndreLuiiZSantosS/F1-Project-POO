@@ -1,3 +1,4 @@
+from modules.vendas import Venda
 from views import View
 from models.etapas import Etapas  
 from templates.abrircontaUI import AbrircontaUI
@@ -28,6 +29,7 @@ class UI:
     @staticmethod
     def menu():
         if UI.login():
+            
             """Exibe o menu organizado horizontalmente por categorias."""
             print("\n===== Menu Principal =====")
             print("Categorias: Pilotos | Etapas | Resultados | Estatísticas | Vendas | Sair")
@@ -44,8 +46,9 @@ class UI:
             print("Usuario ou senha errados!")
     @staticmethod
     def main():
-        AbrircontaUI.main()
-        UI.login()
+        abrirconta = input("gostaria de criar uma conta? ")
+        if abrirconta == 1:  AbrircontaUI.main()
+        else: UI.login()
         if UI.is_admin:
             op = 0
             while op != 9:  
