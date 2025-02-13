@@ -1,5 +1,6 @@
 from models.piloto import Piloto, Pilotos
 from models.etapas import Etapas  
+from models.vendas import Venda
 
 class View:
     @staticmethod
@@ -52,3 +53,19 @@ class View:
     def etapa_excluir(id):
         """Remove uma etapa."""
         Etapas.remover_etapa(id)
+
+    @staticmethod
+    def listar_vendas():
+        return Venda.listar_vendas()
+    
+    @staticmethod
+    def adicionar_venda(venda):
+        Venda.adicionar_venda(venda)
+    
+    @staticmethod
+    def criar_carrinho():
+        return Carrinho()
+    
+    @staticmethod
+    def criar_ingresso(etapa_id, dias, qtd):
+        return ingresso(etapa_id=etapa_id, dias=dias, qtd=qtd)
