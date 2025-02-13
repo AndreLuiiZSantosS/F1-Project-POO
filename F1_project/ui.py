@@ -38,14 +38,18 @@ class UI:
                 print("2. adicionar Pilotos       3. Listar Pilotos        4. Editar Piloto         5. Excluir Piloto")
                 print("7. Gerenciar Estatísticas 8. Gerenciar Vendas      9. Sair")
             else:
-                print("1. Listar Pilotos        9. Sair")
+                print("1. Listar Pilotos    2. Listar Etapas      9. Sair")
             return int(input("Informe uma opção: "))
         else:
             print("Usuario ou senha errados!")
     @staticmethod
     def main():
-        AbrircontaUI.main()
-        UI.login()
+        abrirConta = input("Gostaria de abrir uma conta? ")
+        while abrirConta != 9:
+            if abrirConta == 1:
+                AbrircontaUI.main()
+            if abrirConta == 2:
+                UI.menu()
         if UI.is_admin:
             op = 0
             while op != 9:  
