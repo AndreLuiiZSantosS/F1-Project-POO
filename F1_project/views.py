@@ -1,6 +1,7 @@
 from models.piloto import Piloto, Pilotos
 from models.etapas import Etapas  
 from models.vendas import Venda
+from models.carrinho import Carrrinho, Carrinhos
 
 class View:
     @staticmethod
@@ -69,3 +70,15 @@ class View:
     @staticmethod
     def criar_ingresso(etapa_id, dias, qtd):
         return ingresso(etapa_id=etapa_id, dias=dias, qtd=qtd)
+
+    @staticmethod
+    def inserir_carrinho(id_produto):
+        c = Carrrinho(id_produto)
+        Carrinhos.inserir(c)
+    @staticmethod
+    def listar_carrinho():
+        return Carrinhos.listar()
+    @staticmethod
+    def excluir_carrinho(id):
+        c = Carrrinho(id)
+        Carrinhos.excluir(c)
