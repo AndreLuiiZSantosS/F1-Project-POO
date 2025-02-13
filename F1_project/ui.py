@@ -172,6 +172,54 @@ class UI:
     @classmethod
     def gerenciar_vendas(cls):
         """Exibe o menu de gerenciamento de vendas."""
-        print("Gerenciamento de Vendas (em desenvolvimento)")
+        while True:
+            print("\n=== Gerenciamento de Vendas ===")
+            print("1. Listar Vendas")
+            print("2. Adicionar Venda")
+            print("3. Remover Venda")
+            print("4. Voltar")
+
+            opcao = input("Escolha uma opção: ")
+
+            if opcao == "1":
+                cls.listar_vendas()
+            elif opcao == "2":
+                cls.adicionar_venda()
+            elif opcao == "3":
+                cls.remover_venda()
+            elif opcao == "4":
+                return
+            else:
+                print("Opção inválida. Tente novamente.")
+
+@classmethod
+def listar_vendas(cls):
+    """Lista todas as vendas cadastradas."""
+    vendas = View.listar_vendas()
+    if not vendas:
+        print("Nenhuma venda cadastrada.")
+    else:
+        for venda in vendas:
+            print(venda)
+
+@classmethod
+def adicionar_venda(cls):
+    """Adiciona uma nova venda."""
+    etapa_id = input("Informe o ID da etapa: ")
+    dias = input("Informe os dias do ingresso: ")
+    quantidade = input("Informe a quantidade de ingressos: ")
+    
+    nova_venda = View.criar_ingresso(etapa_id, dias, quantidade)
+    View.adicionar_venda(nova_venda)
+    
+    print("Venda adicionada com sucesso!")
+
+@classmethod
+def remover_venda(cls):
+    """Remove uma venda existente."""
+    cls.listar_vendas()
+    id_venda = input("Informe o ID da venda a ser removida: ")
+    Venda.remover_venda(id_venda)
+    print("Venda removida com sucesso!")
 
 UI.main()
