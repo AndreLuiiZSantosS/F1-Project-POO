@@ -2,6 +2,7 @@ from models.piloto import Piloto, Pilotos
 from models.etapas import Etapas  
 from models.vendas import Venda
 from models.carrinho import Carrrinho, Carrinhos
+from models.cliente import Cliente, Clientes
 
 class View:
     @staticmethod
@@ -82,3 +83,26 @@ class View:
     def excluir_carrinho(id):
         c = Carrrinho(id)
         Carrinhos.excluir(c)
+
+    @staticmethod
+    def cliente_autenticar(nome, senha):
+        for c in Clientes.listar():
+            if c.nome == nome and c.senha == senha:
+                return { "id" : c.id, "nome" : c.nome }
+        return None    
+    
+    @staticmethod
+    def cliente_listar():
+        return Clientes.listar()
+    @staticmethod
+    def cliente_inserir(nome, senha):
+        c = Cliente(0, nome, senha)
+        Clientes.inserir(c)
+    @staticmethod
+    def cliente_atualizar(id, nome, senha):
+        c = Cliente(id, nome, senha)
+        Clientes.atualizar(c)
+    @staticmethod
+    def cliente_excluir(id):
+        c = Cliente(id, "", "")
+        Clientes.excluir(c)
