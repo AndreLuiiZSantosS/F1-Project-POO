@@ -35,7 +35,6 @@ class Venda:
         vendas.append(venda)
         Venda.salvar_dados(Venda.DB_VENDAS, vendas)
 
-        print(f"Ingresso {tipo_ingresso} comprado para {etapa['nome']}! Total: R$ {preco}")
 
 
 class MenuVendas:
@@ -46,9 +45,6 @@ class MenuVendas:
         """Menu para o usuário comprar ingressos."""
         while True:
             etapas = Venda.carregar_dados(Venda.DB_ETAPAS)
-            if not etapas:
-                print("Nenhuma etapa disponível para venda.")
-                return
 
             print("\n===== Compra de Ingressos =====")
             for idx, etapa in enumerate(etapas, 1):

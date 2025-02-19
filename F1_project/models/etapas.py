@@ -65,7 +65,6 @@ class Etapas:
         nova_etapa = Etapa(id, nome, data, pista)
         cls.objetos.append(nova_etapa)
         cls.salvar_etapas()
-        print("Etapa adicionada com sucesso!")
 
     @classmethod
     def editar_etapa(cls, id, nome=None, data=None, pista=None):
@@ -76,9 +75,6 @@ class Etapas:
             etapa.data = data if data else etapa.data
             etapa.pista = pista if pista else etapa.pista
             cls.salvar_etapas()
-            print("Etapa editada com sucesso!")
-        else:
-            print("Etapa não encontrada.")
 
     @classmethod
     def remover_etapa(cls, id):
@@ -87,6 +83,4 @@ class Etapas:
         if etapa:
             cls.objetos.remove(etapa)
             cls.salvar_etapas()
-            print("Etapa removida com sucesso!")
-        else:
-            print("Etapa não encontrada.")
+
