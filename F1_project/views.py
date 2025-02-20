@@ -1,6 +1,6 @@
 from models.piloto import Piloto, Pilotos
 from models.etapas import Etapas  
-from models.vendas import Venda
+from F1_project.templates.manteringressoUI import Venda
 from models.carrinho import Carrrinho, Carrinhos
 from models.cliente import Cliente, Clientes
 

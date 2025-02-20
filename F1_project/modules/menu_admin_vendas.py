@@ -1,7 +1,7 @@
 from models.carrinho import carrrinho
-from modules.ingresso import Ingresso
+from F1_project.models.ingresso import Ingresso
 from models.etapas import Etapas
-from F1_project.models.vendas import Vendas
+from F1_project.templates.manteringressoUI import Vendas
 
 class MenuVendas:
     @staticmethod
