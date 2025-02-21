@@ -21,67 +21,72 @@ class UI:
         if username == "admin" and password == "admin":
             UI.is_admin = True
             print("Login como administrador realizado com sucesso!")
-        elif autenticado != None:
+        elif autenticado is not None:
             UI.is_admin = False
             print("Login como usuário comum realizado com sucesso.")
         
-        if autenticado != None:
-            return 1
-        else:
-            return None
+        return autenticado is not None or (username == "admin" and password == "admin")
     
     @staticmethod
-    def menu():
-        if UI.login() == 1:
-            
-            #Exibe o menu organizado horizontalmente por categorias.
+    def menu_admin():
+        """Menu específico para administradores."""
+        print("\n===== Menu Administrador =====")
+        print("1. Gerenciar etapas")
+        print("2. Adicionar Pilotos")
+        print("3. Listar Pilotos")
+        print("4. Editar Piloto")
+        print("5. Excluir Piloto")
+        print("6. Gerenciar Estatísticas")
+        print("7. Gerenciar Vendas")
+        print("8. Sair")
+        return int(input("Informe uma opção: "))
 
-            print("\n===== Menu Principal =====")
-            print("Categorias: Pilotos | Etapas | Resultados | Estatísticas | Vendas | Sair")
-            print("-------------------------------------------------------------")
-            
-            if UI.is_admin:
-                print("1. Gerenciar etapas")
-                print("2. adicionar Pilotos       3. Listar Pilotos        4. Editar Piloto         5. Excluir Piloto")
-                print("7. Gerenciar Estatísticas 8. Gerenciar Vendas      9. Sair")
-            else:
-                print("1. Listar Pilotos        9. Sair")
-            return int(input("Informe uma opção: "))
-        else:
-            print("Usuario ou senha errados!")
+    @staticmethod
+    def menu_usuario():
+        """Menu específico para usuários comuns."""
+        print("\n===== Menu Usuário =====")
+        print("1. Listar Pilotos")
+        print("2. Listar Etapas")
+        print("3. Comprar Ingresso")
+        print("4. Sair")
+        return int(input("Informe uma opção: "))
+
     @staticmethod
     def main():
-        abrirconta = input("gostaria de criar uma conta? (sim/nao) ")
+        """Método principal para iniciar a aplicação."""
+        abrirconta = input("Gostaria de criar uma conta? (sim/não) ")
         if abrirconta.lower() == "sim":
             AbrirContaUI.main()
-            UI.menu()
-        else:
-            UI.menu()
         
-        if UI.is_admin:
-            op = 0
-            while op != 9:  
-                op = UI.menu()
-                if op == 1: UI.gerenciar_etapas()
-                if op == 2: UI.adicionar_pilotos()
-                if op == 3: UI.listar_pilotos()
-                if op == 4: UI.piloto_atualizar()
-                if op == 5: UI.piloto_excluir()
-                if op == 6: UI.gerenciar_resultados()
-                if op == 7: UI.gerenciar_estatisticas()
-                if op == 8: UI.gerenciar_vendas()
+        if UI.login():
+            if UI.is_admin:
+                op = 0
+                while op != 8:  # 8 é a opção de sair no menu admin
+                    op = UI.menu_admin()
+                    if op == 1: UI.gerenciar_etapas()
+                    elif op == 2: UI.adicionar_pilotos()
+                    elif op == 3: UI.listar_pilotos()
+                    elif op == 4: UI.piloto_atualizar()
+                    elif op == 5: UI.piloto_excluir()
+                    elif op == 6: UI.gerenciar_estatisticas()
+                    elif op == 7: UI.gerenciar_vendas()
+                    elif op == 8: print("Saindo...")
+                    else: print("Opção inválida!")
+            else:
+                op = 0
+                while op != 4:  # 4 é a opção de sair no menu usuário
+                    op = UI.menu_usuario()
+                    if op == 1: UI.listar_pilotos()
+                    elif op == 2: UI.listar_etapas()
+                    elif op == 3: UI.comprar_ingresso()
+                    elif op == 4: print("Saindo...")
+                    else: print("Opção inválida!")
         else:
-            op = 0
-            while op != 9:  
-                op = UI.menu()
-                if op == 1: UI.listar_pilotos()
-                if op == 2: UI.listar_etapas()
-               #if op == 3: UI.listar_estatisticas()
-                if op == 4: UI.comprar_ingresso() 
-    
+            print("Usuário ou senha incorretos!")
+
     @classmethod
     def gerenciar_etapas(cls):
-        #exibe o menu de gerenciamento de etapas.
+        """Exibe o menu de gerenciamento de etapas."""
         while True:
             print("\n=== Gerenciamento de Etapas ===")
             print("1. Listar Etapas")
@@ -143,38 +148,38 @@ class UI:
 
     @classmethod
     def adicionar_pilotos(cls):
+        """Adiciona um novo piloto."""
         nome = input("Informe o nome: ")
         equipe = input("Informe a equipe: ")
-        pontuacao = input("Informe a pontuacao: ")
+        pontuacao = input("Informe a pontuação: ")
         View.piloto_inserir(nome, equipe, pontuacao)
 
     @classmethod
     def listar_pilotos(cls):
+        """Lista todos os pilotos cadastrados."""
         pilotos = View.piloto_listar()
         if len(pilotos) == 0:
             print("Nenhum piloto cadastrado")
         else:    
-            for piloto in pilotos: print(piloto)
+            for piloto in pilotos:
+                print(piloto)
 
     @classmethod 
     def piloto_atualizar(cls):
+        """Atualiza os dados de um piloto."""
         cls.listar_pilotos()
-        id = int(input("Informe o id do piloto a ser alterado: "))
+        id = int(input("Informe o ID do piloto a ser alterado: "))
         nome = input("Informe o novo nome: ")
-        equipe = input("Informe o novo equipe: ")
-        pontuacao = input("Informe o novo pontuacao: ")
+        equipe = input("Informe a nova equipe: ")
+        pontuacao = input("Informe a nova pontuação: ")
         View.piloto_atualizar(id, nome, equipe, pontuacao)
     
     @classmethod
     def piloto_excluir(cls):
+        """Exclui um piloto."""
         cls.listar_pilotos()
-        id = int(input("Informe o id do piloto a ser excluído: "))
+        id = int(input("Informe o ID do piloto a ser excluído: "))
         View.piloto_excluir(id)
-
-    @classmethod
-    def gerenciar_resultados(cls):
-        """Exibe o menu de gerenciamento de resultados."""
-        print("Gerenciamento de Resultados (em desenvolvimento)")
 
     @classmethod
     def gerenciar_estatisticas(cls):
@@ -194,7 +199,7 @@ class UI:
             opcao = input("Escolha uma opção: ")
 
             if opcao == "1":
-                UI.listar_vendas()
+                cls.listar_vendas()
             elif opcao == "2":
                 cls.adicionar_venda()
             elif opcao == "3":
@@ -234,4 +239,11 @@ class UI:
         Venda.remover_venda(id_venda)
         print("Venda removida com sucesso!")
 
+    @classmethod
+    def comprar_ingresso(cls):
+        """Permite ao usuário comprar um ingresso."""
+        print("Funcionalidade de compra de ingresso (em desenvolvimento)")
+
+
+# Inicia a aplicação
 UI.main()
