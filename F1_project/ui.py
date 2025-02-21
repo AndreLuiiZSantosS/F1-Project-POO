@@ -1,6 +1,7 @@
 from modules.vendas import Venda
 from views import View
 from models.etapas import Etapas  
+from templates.abrircontaUI import AbrirContaUI
 
 
 class UI:
@@ -20,17 +21,21 @@ class UI:
         if username == "admin" and password == "admin":
             UI.is_admin = True
             print("Login como administrador realizado com sucesso!")
-        else:
+        elif autenticado != None:
             UI.is_admin = False
             print("Login como usuário comum realizado com sucesso.")
         
-        return autenticado
+        if autenticado != None:
+            return 1
+        else:
+            return None
     
     @staticmethod
     def menu():
-        if UI.login():
+        if UI.login() == 1:
             
-            """Exibe o menu organizado horizontalmente por categorias."""
+            #Exibe o menu organizado horizontalmente por categorias.
+
             print("\n===== Menu Principal =====")
             print("Categorias: Pilotos | Etapas | Resultados | Estatísticas | Vendas | Sair")
             print("-------------------------------------------------------------")
@@ -46,7 +51,13 @@ class UI:
             print("Usuario ou senha errados!")
     @staticmethod
     def main():
-        abrirconta = input("gostaria de criar uma conta? ")
+        abrirconta = input("gostaria de criar uma conta? (sim/nao) ")
+        if abrirconta.lower() == "sim":
+            AbrirContaUI.main()
+            UI.menu()
+        else:
+            UI.menu()
+        
         if UI.is_admin:
             op = 0
             while op != 9:  
@@ -70,7 +81,7 @@ class UI:
     
     @classmethod
     def gerenciar_etapas(cls):
-        """Exibe o menu de gerenciamento de etapas."""
+        #exibe o menu de gerenciamento de etapas.
         while True:
             print("\n=== Gerenciamento de Etapas ===")
             print("1. Listar Etapas")

@@ -72,7 +72,7 @@ class ManterIngressoUI:
                 print("Opção inválida.")
 
 
-       def gerenciar_vendas ():
+    #def gerenciar_vendas ():
 
 import json
 

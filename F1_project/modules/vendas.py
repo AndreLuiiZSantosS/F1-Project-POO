@@ -1,5 +1,5 @@
 import json
-from F1_project.models.ingresso import Ingresso
+from models.ingresso import Ingresso
 
 class Venda:
     # Caminho do banco de dados
