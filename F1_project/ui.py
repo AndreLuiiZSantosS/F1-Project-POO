@@ -1,7 +1,11 @@
-from modules.vendas import Venda
-from views import View
-from models.etapas import Etapas  
-from templates.abrircontaUI import AbrirContaUI
+from .views import View
+from .models.carrinho import Carrinho
+from .models.ingresso import Ingresso
+from .models.etapas import Etapas
+from .models.cliente import Cliente, Clientes
+from .models.piloto import Piloto, Pilotos
+from .templates.abrircontaUI import AbrirContaUI
+from .modules.vendas import Venda 
 
 
 class UI:

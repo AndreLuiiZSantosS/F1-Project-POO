@@ -1,8 +1,10 @@
 from models.piloto import Piloto, Pilotos
 from models.etapas import Etapas  
 from templates.manteringressoUI import ManterIngressoUI
-from models.carrinho import Carrrinho, Carrinhos
+from models.carrinho import Carrinho, Carrinhos
 from models.cliente import Cliente, Clientes
+from F1_project.modules.vendas import Venda
+from models.ingresso import Ingresso, Ingressos
 
 class View:
     @staticmethod
@@ -70,18 +72,18 @@ class View:
     
     @staticmethod
     def criar_ingresso(etapa_id, dias, qtd):
-        return ingresso(etapa_id=etapa_id, dias=dias, qtd=qtd)
+        return Ingresso(etapa_id=etapa_id, dias=dias, qtd=qtd)
 
     @staticmethod
     def inserir_carrinho(id_produto):
-        c = Carrrinho(id_produto)
+        c = Carrinho(id_produto)
         Carrinhos.inserir(c)
     @staticmethod
     def listar_carrinho():
         return Carrinhos.listar()
     @staticmethod
     def excluir_carrinho(id):
-        c = Carrrinho(id)
+        c = Carrinho(id)
         Carrinhos.excluir(c)
 
     @staticmethod

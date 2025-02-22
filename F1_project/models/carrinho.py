@@ -1,70 +1,94 @@
 import json
+from models.ingresso import Ingresso
 
-class Carrrinho:
+class Carrinho:
     def __init__(self, id):
-        self.id = id # atributos de instância
-       #self.descricao = descricao
-    def __str__(self):
-        return f"{self.id}"
+        self.id = id
+        self.itens = []  # Lista de itens no carrinho
 
+    def adicionar_ingresso(self, ingresso):
+        """Adiciona um ingresso ao carrinho."""
+        self.itens.append(ingresso)
+
+    def remover_ingresso(self, id_ingresso):
+        """Remove um ingresso do carrinho."""
+        self.itens = [item for item in self.itens if item.id != id_ingresso]
+
+    def calcular_total(self):
+        """Calcula o valor total do carrinho."""
+        return sum(item.calcular_total() for item in self.itens)
+
+    def __str__(self):
+        return f"Carrinho {self.id} - Total: R$ {self.calcular_total():.2f}"
+
+    def to_dict(self):
+        """Converte o carrinho em um dicionário."""
+        return {
+            "id": self.id,
+            "itens": [vars(item) for item in self.itens]
+        }
+
+    @classmethod
+    def from_dict(cls, data):
+        """Cria um carrinho a partir de um dicionário."""
+        carrinho = cls(data["id"])
+        for item_data in data["itens"]:
+            carrinho.adicionar_ingresso(Ingresso(**item_data))
+        return carrinho
 
 
 class Carrinhos:
-    objetos = [] # atributo de classe
+    objetos = []  # Lista de carrinhos
+
     @classmethod
-    def inserir(cls, obj):
-        # abre a lista do arquivo
-        cls.abrir()
-        # insere o objeto na lista
-        cls.objetos.append(obj)
-        # salva a lista no arquivo
-        cls.salvar()
-    @classmethod
-    def listar(cls):
-        # abre a lista do arquivo
-        cls.abrir()
-        # retorna a lista para a UI
-        return cls.objetos[:]
-    @classmethod
-    def listar_id(cls, id):
-        cls.abrir()
-        # percorre a lista procurando o id    
-        for x in cls.objetos:
-            if x.id == id: return x
-        return None
-    @classmethod
-    def atualizar(cls, obj):
-        x = cls.listar_id(obj.id)
-        if x != None:
-            cls.objetos.remove(x)
-            cls.objetos.append(obj)
-            cls.salvar()        
-    @classmethod
-    def excluir(cls, obj):
-        x = cls.listar_id(obj.id)
-        if x != None:
-            cls.objetos.remove(x)
-            cls.salvar()        
-    @classmethod
-    def salvar(cls):
-        # open - cria e abre o arquivo clientes.json
-        # vars - converte um objeto em um dicionário
-        # dump - pega a lista de objetos e salva no arquivo
-        with open("carrinhos.json", mode="w") as arquivo:
-            json.dump(cls.objetos, arquivo, default = vars)
-    @classmethod
-    def abrir(cls):
-        # esvazia a lista de objetos
+    def carregar_carrinhos(cls):
+        """Carrega a lista de carrinhos do arquivo JSON."""
         cls.objetos = []
         try:
-            with open("carrinhos.json", mode="r", encoding="utf-8") as arquivo:
-                # abre o arquivo com a lista de dicionários -> clientes_json
-                objetos_json = json.load(arquivo)
-                # percorre a lista de dicionários
-                for obj in objetos_json:
-                    # recupera cada dicionário e cria um objeto
-                    c = Carrrinho(obj["id"])
-                    # insere o objeto na lista
-                    cls.objetos.append(c)    
+            with open("carrinhos.json", mode="r") as arquivo:
+                dados = json.load(arquivo)
+                for obj in dados:
+                    cls.objetos.append(Carrinho.from_dict(obj))
         except FileNotFoundError:
             pass
+
+    @classmethod
+    def salvar_carrinhos(cls):
+        """Salva a lista de carrinhos no arquivo JSON."""
+        with open("carrinhos.json", mode="w") as arquivo:
+            json.dump([carrinho.to_dict() for carrinho in cls.objetos], arquivo, indent=4)
+
+    @classmethod
+    def listar_carrinhos(cls):
+        """Retorna a lista de carrinhos."""
+        cls.carregar_carrinhos()
+        return cls.objetos
+
+    @classmethod
+    def buscar_por_id(cls, id):
+        """Busca um carrinho pelo ID."""
+        cls.carregar_carrinhos()
+        for carrinho in cls.objetos:
+            if carrinho.id == id:
+                return carrinho
+        return None
+
+    @classmethod
+    def adicionar_carrinho(cls, carrinho):
+        """Adiciona um novo carrinho à lista."""
+        cls.carregar_carrinhos()
+        # Verifica se o ID já existe
+        if cls.buscar_por_id(carrinho.id):
+            raise ValueError(f"Já existe um carrinho com o ID {carrinho.id}.")
+        cls.objetos.append(carrinho)
+        cls.salvar_carrinhos()
+
+    @classmethod
+    def remover_carrinho(cls, id):
+        """Remove um carrinho da lista."""
+        cls.carregar_carrinhos()
+        carrinho = cls.buscar_por_id(id)
+        if not carrinho:
+            raise ValueError(f"Carrinho com ID {id} não encontrado.")
+        cls.objetos.remove(carrinho)
+        cls.salvar_carrinhos()

@@ -1,7 +1,7 @@
-from models.carrinho import carrrinho
-from F1_project.models.ingresso import Ingresso
+from models.carrinho import Carrinho  
+from models.ingresso import Ingresso
 from models.etapas import Etapas
-from F1_project.templates.manteringressoUI import Vendas
+from modules.vendas import Venda  
 
 class MenuVendas:
     @staticmethod
@@ -103,18 +103,18 @@ class MenuVendas:
 
         confirmacao = input("Confirmar compra? (S/N): ").strip().lower()
         if confirmacao == "s":
-            ingressos_comprados = carrinho.finalizar_compra()
-            for ingresso in ingressos_comprados:
+            for ingresso in carrinho.itens:
                 etapa = Etapas.buscar_etapa_por_id(ingresso.etapa_id)
                 etapa.ingressos_disponiveis -= ingresso.quantidade
                 Etapas.salvar_etapas()
-                Vendas.adicionar_venda({
+                Venda.adicionar_venda({  # Corrigido para Venda
                     "usuario": usuario,
                     "etapa_id": ingresso.etapa_id,
                     "dias": ingresso.dias,
                     "quantidade": ingresso.quantidade,
                     "valor_total": ingresso.calcular_total()
                 })
+            carrinho.limpar_carrinho()  # Limpa o carrinho após a compra
             print("Compra finalizada com sucesso!")
         else:
             print("Compra cancelada.")
