@@ -1,15 +1,17 @@
-from .views import View
-from .models.carrinho import Carrinho
-from .models.ingresso import Ingresso
-from .models.etapas import Etapas
-from .models.cliente import Cliente, Clientes
-from .models.piloto import Piloto, Pilotos
-from .templates.abrircontaUI import AbrirContaUI
-from .modules.vendas import Venda 
+from  views import View
+from  models.carrinho import Carrinho
+from  models.ingresso import Ingresso
+from  models.etapas import Etapas
+from  models.cliente import Cliente, Clientes
+from  models.piloto import Piloto, Pilotos
+from  templates.abrircontaUI import AbrirContaUI
+from templates.manteringressoUI import ManterIngressoUI
 
 
 class UI:
     # Dados do usuário logado
+    cliente_id = None
+    cliente_nome = ""
     piloto_id = 0
     piloto_nome = ""
     is_admin = False
@@ -19,17 +21,23 @@ class UI:
         """Método para realizar o login."""
         username = input("Digite o nome de usuário: ")
         password = input("Digite a senha: ")
-        
-        autenticado = View.cliente_autenticar(username, password)
+
+        # Supondo que View.cliente_autenticar retorna um dicionário ou None
+        cliente = View.cliente_autenticar(username, password)
 
         if username == "admin" and password == "admin":
             UI.is_admin = True
             print("Login como administrador realizado com sucesso!")
-        elif autenticado is not None:
+            return True
+        elif cliente is not None:
+            UI.cliente_id = cliente['id']  # Acessa o ID do cliente usando a chave 'id'
+            UI.cliente_nome = cliente['nome']  # Acessa o nome do cliente usando a chave 'nome'
             UI.is_admin = False
-            print("Login como usuário comum realizado com sucesso.")
-        
-        return autenticado is not None or (username == "admin" and password == "admin")
+            print(f"Login como usuário comum realizado com sucesso. Bem-vindo, {cliente['nome']}!")
+            return True
+        else:
+            print("Usuário ou senha incorretos.")
+            return False
     
     @staticmethod
     def menu_admin():
@@ -83,6 +91,7 @@ class UI:
                     if op == 1: UI.listar_pilotos()
                     elif op == 2: UI.listar_etapas()
                     elif op == 3: UI.comprar_ingresso()
+                    elif op == 4: UI.listar_meus_ingressos()
                     elif op == 4: print("Saindo...")
                     else: print("Opção inválida!")
         else:
@@ -242,12 +251,39 @@ class UI:
         id_venda = input("Informe o ID da venda a ser removida: ")
         Venda.remover_venda(id_venda)
         print("Venda removida com sucesso!")
-
+    
     @classmethod
     def comprar_ingresso(cls):
-        """Permite ao usuário comprar um ingresso."""
-        print("Funcionalidade de compra de ingresso (em desenvolvimento)")
+        """Inicia o processo de compra de ingressos."""
+        if cls.cliente_id is None:
+            print("Nenhum usuário logado. Faça login para comprar ingressos.")
+            return
+        ManterIngressoUI.menu_vendas_usuario(cls.cliente_id)
 
+    @classmethod
+    def listar_meus_ingressos(cls):
+        """Lista os ingressos comprados pelo usuário logado."""
+        if cls.cliente_id is None:
+            print("Nenhum usuário logado.")
+            return
+
+        # Usa a classe View para buscar os ingressos do usuário
+        ingressos = View.listar_ingressos_por_cliente(cls.cliente_id)
+
+        if not ingressos:
+            print("\nVocê não possui ingressos comprados.")
+            return
+
+        print("\n===== Meus Ingressos =====")
+        for ingresso in ingressos:
+            # Busca os detalhes da etapa usando a classe View
+            etapa = View.buscar_etapa_por_id(ingresso.etapa_id)
+            if etapa:
+                print(f"Evento: {etapa['nome']} - Data: {etapa['data']}")
+                print(f"Quantidade: {ingresso.quantidade} - Valor Total: R$ {ingresso.valor}")
+                print("---------------------------")
+            else:
+                print(f"Ingresso para etapa desconhecida (ID: {ingresso.etapa_id})")
 
 # Inicia a aplicação
 UI.main()

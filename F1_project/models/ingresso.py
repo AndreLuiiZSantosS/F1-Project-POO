@@ -1,18 +1,25 @@
 import json
 
 class Ingresso:
-    def __init__(self, id,etapa_id, quantidade, valor):
+    def __init__(self, id,etapa_id,  cliente_id, quantidade, valor):
         
         self.id = id
         self.etapa_id = etapa_id
+        self.cliente_id = cliente_id
         self.quantidade = quantidade
         self.valor = valor
     
     def __str__(self):
-        return f"{self.etapa_id} - {self.quantidade} - {self.valor}"
+        return f"{self.etapa_id} - {self.quantidade} - {self.valor} - {self.cliente_id}"
 
 class Ingressos:
     objetos = []
+
+    @classmethod
+    def listar_por_usuario(cls, cliente_id):
+        cls.carregar_ingresso()
+        return [ingresso for ingresso in cls.objetos if ingresso.cliente_id == cliente_id]
+    
     @classmethod
     def carregar_ingresso(cls):
          # esvazia a lista de objetos
@@ -24,7 +31,7 @@ class Ingressos:
                 # percorre a lista de dicionários
                 for obj in clientes_json:
                     # recupera cada dicionário e cria um objeto
-                    c = Ingresso(obj["id"] ,obj["etapa_id"], obj["quantidade"], obj["valor"])
+                    c = Ingresso(obj["id"] ,obj["etapa_id"], obj["cliente_id"],obj["quantidade"], obj["valor"])
                     # insere o objeto na lista
                     cls.objetos.append(c)    
         except FileNotFoundError:

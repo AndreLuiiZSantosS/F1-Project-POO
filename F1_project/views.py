@@ -3,7 +3,6 @@ from models.etapas import Etapas
 from templates.manteringressoUI import ManterIngressoUI
 from models.carrinho import Carrinho, Carrinhos
 from models.cliente import Cliente, Clientes
-from F1_project.modules.vendas import Venda
 from models.ingresso import Ingresso, Ingressos
 
 class View:
@@ -64,7 +63,7 @@ class View:
     
     @staticmethod
     def adicionar_venda(venda):
-        Venda.adicionar_venda(venda)
+        Venda.comprar_ingresso(venda)
     
     @staticmethod
     def criar_carrinho():
@@ -72,7 +71,7 @@ class View:
     
     @staticmethod
     def criar_ingresso(etapa_id, dias, qtd):
-        return Ingresso(etapa_id=etapa_id, dias=dias, qtd=qtd)
+        return Ingresso(etapa_id, dias, qtd)
 
     @staticmethod
     def inserir_carrinho(id_produto):
@@ -108,3 +107,18 @@ class View:
     def cliente_excluir(id):
         c = Cliente(id, "", "")
         Clientes.excluir(c)
+
+    @staticmethod
+    def listar_ingressos_por_cliente(cliente_id):
+        """Retorna os ingressos comprados por um cliente."""
+        ingressos = Ingressos.listar_ingresso()  # Carrega todos os ingressos
+        return [ingresso for ingresso in ingressos if ingresso.cliente_id == cliente_id]
+
+    @staticmethod
+    def buscar_etapa_por_id(etapa_id):
+        """Retorna os detalhes de uma etapa pelo ID."""
+        etapas = Etapas.listar_etapas()  # Carrega todas as etapas
+        for etapa in etapas:
+            if etapa.id == etapa_id:
+                return {"nome": etapa.nome, "data": etapa.data}  # Retorna um dicionário com os detalhes
+        return None
