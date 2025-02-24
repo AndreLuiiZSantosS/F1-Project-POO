@@ -3,7 +3,6 @@ from models.etapas import Etapas
 from templates.abrircontaUI import AbrirContaUI
 from templates.manteringressoUI import ManterIngressoUI
 from templates.simularCorrida import SimuladorCorrida
-from models.piloto import Piloto
 
 class UI:
     
@@ -92,7 +91,7 @@ class UI:
                     elif op == 8: 
                         UI.gerenciar_campeonato_construtores()
                     elif op == 9: 
-                        UI.resetar_campeonato()
+                        UI.resetar_pontuacoes()
                     elif op == 10: 
                         print("Saindo...")
                     else: 
@@ -147,7 +146,7 @@ class UI:
     @classmethod
     def listar_etapas(cls):
         """Lista todas as etapas cadastradas."""
-        etapas = Etapas.listar_etapas()
+        etapas = View.etapa_listar()
         if not etapas:
             print("Nenhuma etapa cadastrada.")
         else:
@@ -160,7 +159,7 @@ class UI:
         nome = input("Nome da etapa: ")
         data = input("Data da etapa: ")
         pista = input("Pista da etapa: ")
-        Etapas.adicionar_etapa(nome, data, pista)
+        View.etapa_inserir(nome, data, pista)
         print("Etapa adicionada com sucesso!")
 
     @classmethod
@@ -171,14 +170,14 @@ class UI:
         nome = input("Novo nome (deixe em branco para manter): ")
         data = input("Nova data (deixe em branco para manter): ")
         pista = input("Nova pista (deixe em branco para manter): ")
-        Etapas.editar_etapa(id, nome or None, data or None, pista or None)
+        View.etapa_atualizar(id, nome or None, data or None, pista or None)
 
     @classmethod
     def remover_etapa(cls):
         """Remove uma etapa existente."""
         cls.listar_etapas()
         id = int(input("ID da etapa a remover: "))
-        Etapas.remover_etapa(id)
+        View.etapa_excluir(id)
 
     @classmethod
     def adicionar_pilotos(cls):
@@ -196,7 +195,10 @@ class UI:
             print("Nenhum piloto cadastrado")
         else:    
             for piloto in pilotos:
-                print(piloto)
+                pilotos_ordenados = sorted(pilotos, key=lambda piloto: piloto.pontuacao, reverse=True)
+                print("\n===== Lista de Pilotos =====")
+                for idx, piloto in enumerate(pilotos_ordenados, 1):
+                    print(f"{idx}. {piloto.nome} ({piloto.equipe}) - Pontuação: {piloto.pontuacao}")
 
     @classmethod 
     def piloto_atualizar(cls):
@@ -244,16 +246,6 @@ class UI:
                 print("Opção inválida. Tente novamente.")
 
     @classmethod
-    def listar_vendas(cls):
-        """Lista todas as vendas cadastradas."""
-        vendas = View.listar_vendas()
-        if not vendas:
-            print("Nenhuma venda cadastrada.")
-        else:
-            for venda in vendas:
-                print(venda)
-
-    @classmethod
     def adicionar_venda(cls):
         """Adiciona uma nova venda."""
         etapa_id = input("Informe o ID da etapa: ")
@@ -266,13 +258,9 @@ class UI:
         print("Venda adicionada com sucesso!")
 
     @classmethod
-    def remover_venda(cls):
-        """Remove uma venda existente."""
-        cls.listar_vendas()
+    def remover_ingresso(cls):
         id_venda = input("Informe o ID da venda a ser removida: ")
-        # Supondo que View.remover_venda existe e implementa a remoção
-        View.remover_venda(id_venda)
-        print("Venda removida com sucesso!")
+        View.excluir_ingresso(id_venda)  
     
     @classmethod
     def comprar_ingresso(cls):
@@ -289,6 +277,7 @@ class UI:
             print("Nenhum usuário logado.")
             return
 
+        # Obtém os ingressos do usuário logado
         ingressos = View.listar_ingressos_por_cliente(cls.cliente_id)
 
         if not ingressos:
@@ -297,13 +286,19 @@ class UI:
 
         print("\n===== Meus Ingressos =====")
         for ingresso in ingressos:
+            # Busca os detalhes da etapa usando a classe View
             etapa = View.buscar_etapa_por_id(ingresso.etapa_id)
             if etapa:
-                print(f"Evento: {etapa['nome']} - Data: {etapa['data']}")
+                print(f"ID: {ingresso.id} - Evento: {etapa['nome']} - Data: {etapa['data']}")
                 print(f"Quantidade: {ingresso.quantidade} - Valor Total: R$ {ingresso.valor}")
                 print("---------------------------")
             else:
                 print(f"Ingresso para etapa desconhecida (ID: {ingresso.etapa_id})")
+        
+        delete = input("Digite 'Y' para deletar algum ingresso / Digite 'N' para voltar \n")
+        if delete.lower == "y":
+            UI.remover_ingresso()
+        
     
     @classmethod
     def simular_corrida(cls):
@@ -327,8 +322,13 @@ class UI:
         View.gerenciar_campeonato_construtores()
     
     @classmethod
-    def resetar_campeonato(cls):
-        """Chama a view para resetar a tabela do campeonato (zerar os resultados)."""
-        View.resetar_campeonato()
+    def resetar_pontuacoes(cls):
+        """Reseta as pontuações de todos os pilotos."""
+        confirmacao = input("Tem certeza que deseja resetar as pontuações de todos os pilotos? (sim/não): ")
+        if confirmacao.lower() == "sim":
+            View.resetar_pontuacoes()  
+            print("Pontuações dos pilotos resetadas com sucesso!")
+        else:
+            print("Operação cancelada.")
 
 UI.main()

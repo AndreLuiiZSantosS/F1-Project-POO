@@ -54,10 +54,10 @@ class Ingressos:
     
     @classmethod
     def listar_id(cls, id):
-        cls.carregar_ingresso()
-        # percorre a lista procurando o id    
-        for x in cls.objetos:
-            if x.id == id: return x
+        cls.carregar_ingresso()  # Carrega os ingressos do arquivo JSON
+        for ingresso in cls.objetos:
+            if ingresso.id == id:  # Compara o ID do ingresso com o ID fornecido
+                return ingresso
         return None
 
     @classmethod
@@ -83,13 +83,13 @@ class Ingressos:
             #x.nome = obj.nome
             #x.email = obj.email
             #x.fone = obj.fone
-            cls.salvar_ingresso()     
+            cls.salvar_ingresso()  
     @classmethod   
-    def remover_Ingresso(cls, obj):
-        x = cls.listar_id(obj.id)
-        if x != None:
-            cls.objetos.remove(x)
-            cls.salvar_ingresso()
+    def remover_Ingresso(cls, id):
+        x = cls.listar_id(id)  
+        if x is not None:
+            cls.objetos.remove(x)  
+            cls.salvar_ingresso()  
 
 
 

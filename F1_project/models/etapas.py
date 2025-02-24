@@ -20,7 +20,7 @@ class Etapas:
         """Carrega as etapas do arquivo JSON."""
         cls.objetos = []
         try:
-            with open("etapas.json", mode="r") as arquivo:
+            with open("etapas.json", mode="r", encoding="utf-8") as arquivo:
                 objetos_json = json.load(arquivo)
                 for obj in objetos_json:
                     e = Etapa(obj["id"], obj["nome"], obj["data"], obj["pista"])

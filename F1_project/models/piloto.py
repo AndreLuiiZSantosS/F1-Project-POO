@@ -85,6 +85,14 @@ class Pilotos:
         if x != None:
             cls.objetos.remove(x)
             cls.salvar_pilotos()     
+    
+    @classmethod
+    def resetar_pontuacoes(cls):
+        """Reseta as pontuações de todos os pilotos para zero."""
+        cls.carregar_pilotos()
+        for piloto in cls.objetos:
+            piloto.pontuacao = 0
+        cls.salvar_pilotos()
 
     @classmethod
     def menu_admin_pilotos(cls):

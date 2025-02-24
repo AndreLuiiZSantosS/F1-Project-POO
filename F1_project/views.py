@@ -4,7 +4,8 @@ from templates.manteringressoUI import ManterIngressoUI
 from models.carrinho import Carrinho, Carrinhos
 from models.cliente import Cliente, Clientes
 from models.ingresso import Ingresso, Ingressos
-from modules.resultados import Resultados  # Importa o módulo de resultados
+from models.resultados import Resultado, Resultados
+
 
 class View:
     @staticmethod
@@ -59,20 +60,21 @@ class View:
         Etapas.remover_etapa(id)
 
     @staticmethod
-    def listar_vendas():
-        return Venda.listar_vendas()
-    
-    @staticmethod
-    def adicionar_venda(venda):
-        Venda.comprar_ingresso(venda)
-    
-    @staticmethod
     def criar_carrinho():
         return Carrinho()
     
     @staticmethod
     def criar_ingresso(etapa_id, dias, qtd):
         return Ingresso(etapa_id, dias, qtd)
+    
+    @staticmethod
+    def excluir_ingresso(id_venda):
+        try:
+            id_venda = int(id_venda)  
+            Ingressos.remover_Ingresso(id_venda)  
+        except ValueError:
+            print("Erro: ID da venda deve ser um número inteiro.")
+
 
     @staticmethod
     def inserir_carrinho(id_produto):
@@ -139,8 +141,6 @@ class View:
         Resultados.exibir_resultado_construtores()
     
     @staticmethod
-    def resetar_campeonato():
-        """
-        Chama o método do módulo de resultados para resetar a tabela do campeonato.
-        """
-        Resultados.resetar_campeonato()
+    def resetar_pontuacoes():
+        """Reseta as pontuações de todos os pilotos para zero."""
+        Pilotos.resetar_pontuacoes()
