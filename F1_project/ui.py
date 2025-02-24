@@ -1,15 +1,16 @@
-from  views import View
-from  models.carrinho import Carrinho
-from  models.ingresso import Ingresso
-from  models.etapas import Etapas
-from  models.cliente import Cliente, Clientes
-from  models.piloto import Piloto, Pilotos
-from  templates.abrircontaUI import AbrirContaUI
+from views import View
+from models.carrinho import Carrinho
+from models.ingresso import Ingresso
+from models.etapas import Etapas
+from models.cliente import Cliente, Clientes
+from models.piloto import Piloto, Pilotos
+from templates.abrircontaUI import AbrirContaUI
 from templates.manteringressoUI import ManterIngressoUI
+from templates.simularCorrida import SimuladorCorrida
 
 
 class UI:
-    # Dados do usuário logado
+    
     cliente_id = None
     cliente_nome = ""
     piloto_id = 0
@@ -22,7 +23,7 @@ class UI:
         username = input("Digite o nome de usuário: ")
         password = input("Digite a senha: ")
 
-        # Supondo que View.cliente_autenticar retorna um dicionário ou None
+        
         cliente = View.cliente_autenticar(username, password)
 
         if username == "admin" and password == "admin":
@@ -30,8 +31,8 @@ class UI:
             print("Login como administrador realizado com sucesso!")
             return True
         elif cliente is not None:
-            UI.cliente_id = cliente['id']  # Acessa o ID do cliente usando a chave 'id'
-            UI.cliente_nome = cliente['nome']  # Acessa o nome do cliente usando a chave 'nome'
+            UI.cliente_id = cliente['id'] 
+            UI.cliente_nome = cliente['nome']  
             UI.is_admin = False
             print(f"Login como usuário comum realizado com sucesso. Bem-vindo, {cliente['nome']}!")
             return True
@@ -60,7 +61,9 @@ class UI:
         print("1. Listar Pilotos")
         print("2. Listar Etapas")
         print("3. Comprar Ingresso")
-        print("4. Sair")
+        print("4. Meus ingressos")
+        print("5. Ver corrida")
+        print("6. Sair")
         return int(input("Informe uma opção: "))
 
     @staticmethod
@@ -73,7 +76,7 @@ class UI:
         if UI.login():
             if UI.is_admin:
                 op = 0
-                while op != 8:  # 8 é a opção de sair no menu admin
+                while op != 8:  
                     op = UI.menu_admin()
                     if op == 1: UI.gerenciar_etapas()
                     elif op == 2: UI.adicionar_pilotos()
@@ -86,12 +89,13 @@ class UI:
                     else: print("Opção inválida!")
             else:
                 op = 0
-                while op != 4:  # 4 é a opção de sair no menu usuário
+                while op != 4:  
                     op = UI.menu_usuario()
                     if op == 1: UI.listar_pilotos()
                     elif op == 2: UI.listar_etapas()
                     elif op == 3: UI.comprar_ingresso()
                     elif op == 4: UI.listar_meus_ingressos()
+                    elif op == 5: UI.simular_corrida()
                     elif op == 4: print("Saindo...")
                     else: print("Opção inválida!")
         else:
@@ -267,7 +271,6 @@ class UI:
             print("Nenhum usuário logado.")
             return
 
-        # Usa a classe View para buscar os ingressos do usuário
         ingressos = View.listar_ingressos_por_cliente(cls.cliente_id)
 
         if not ingressos:
@@ -276,7 +279,6 @@ class UI:
 
         print("\n===== Meus Ingressos =====")
         for ingresso in ingressos:
-            # Busca os detalhes da etapa usando a classe View
             etapa = View.buscar_etapa_por_id(ingresso.etapa_id)
             if etapa:
                 print(f"Evento: {etapa['nome']} - Data: {etapa['data']}")
@@ -284,6 +286,23 @@ class UI:
                 print("---------------------------")
             else:
                 print(f"Ingresso para etapa desconhecida (ID: {ingresso.etapa_id})")
+    
+    @classmethod
+    def simular_corrida(cls):
+        """Simula uma corrida e atualiza as pontuações dos pilotos."""
+        pilotos = View.piloto_listar()  
+        if not pilotos:
+            print("Nenhum piloto cadastrado.")
+            return
 
-# Inicia a aplicação
+        print("\n===== Simulação de Corrida =====")
+        pilotos_atualizados = SimuladorCorrida.simular_corrida(pilotos)
+
+        
+        for piloto in pilotos_atualizados:
+            View.piloto_atualizar(piloto.id, piloto.nome, piloto.equipe, piloto.pontuacao)
+
+        print("\nPontuações atualizadas com sucesso!")
+
+
 UI.main()
