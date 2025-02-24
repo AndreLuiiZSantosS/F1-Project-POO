@@ -5,7 +5,6 @@ from templates.manteringressoUI import ManterIngressoUI
 from templates.simularCorrida import SimuladorCorrida
 from models.piloto import Piloto
 
-
 class UI:
     
     cliente_id = None
@@ -20,7 +19,6 @@ class UI:
         username = input("Digite o nome de usuário: ")
         password = input("Digite a senha: ")
 
-        
         cliente = View.cliente_autenticar(username, password)
 
         if username == "admin" and password == "admin":
@@ -48,7 +46,9 @@ class UI:
         print("5. Excluir Piloto")
         print("6. Gerenciar Estatísticas")
         print("7. Gerenciar Vendas")
-        print("8. Sair")
+        print("8. Gerenciar Campeonato de Construtores")
+        print("9. Resetar Campeonato")
+        print("10. Sair")
         return int(input("Informe uma opção: "))
 
     @staticmethod
@@ -73,29 +73,48 @@ class UI:
         if UI.login():
             if UI.is_admin:
                 op = 0
-                while op != 8:  
+                while op != 10:  # 10 é a opção de sair no menu admin
                     op = UI.menu_admin()
-                    if op == 1: UI.gerenciar_etapas()
-                    elif op == 2: UI.adicionar_pilotos()
-                    elif op == 3: UI.listar_pilotos()
-                    elif op == 4: UI.piloto_atualizar()
-                    elif op == 5: UI.piloto_excluir()
-                    elif op == 6: UI.gerenciar_estatisticas()
-                    elif op == 7: UI.gerenciar_vendas()
-                    elif op == 9: UI.resetar_tabela()
-                    elif op == 8: print("Saindo...")
-                    else: print("Opção inválida!")
+                    if op == 1: 
+                        UI.gerenciar_etapas()
+                    elif op == 2: 
+                        UI.adicionar_pilotos()
+                    elif op == 3: 
+                        UI.listar_pilotos()
+                    elif op == 4: 
+                        UI.piloto_atualizar()
+                    elif op == 5: 
+                        UI.piloto_excluir()
+                    elif op == 6: 
+                        UI.gerenciar_estatisticas()
+                    elif op == 7: 
+                        UI.gerenciar_vendas()
+                    elif op == 8: 
+                        UI.gerenciar_campeonato_construtores()
+                    elif op == 9: 
+                        UI.resetar_campeonato()
+                    elif op == 10: 
+                        print("Saindo...")
+                    else: 
+                        print("Opção inválida!")
             else:
                 op = 0
-                while op != 4:  
+                while op != 6:  
                     op = UI.menu_usuario()
-                    if op == 1: UI.listar_pilotos()
-                    elif op == 2: UI.listar_etapas()
-                    elif op == 3: UI.comprar_ingresso()
-                    elif op == 4: UI.listar_meus_ingressos()
-                    elif op == 5: UI.simular_corrida()
-                    elif op == 4: print("Saindo...")
-                    else: print("Opção inválida!")
+                    if op == 1: 
+                        UI.listar_pilotos()
+                    elif op == 2: 
+                        UI.listar_etapas()
+                    elif op == 3: 
+                        UI.comprar_ingresso()
+                    elif op == 4: 
+                        UI.listar_meus_ingressos()
+                    elif op == 5: 
+                        UI.simular_corrida()
+                    elif op == 6: 
+                        print("Saindo...")
+                    else: 
+                        print("Opção inválida!")
         else:
             print("Usuário ou senha incorretos!")
 
@@ -251,7 +270,8 @@ class UI:
         """Remove uma venda existente."""
         cls.listar_vendas()
         id_venda = input("Informe o ID da venda a ser removida: ")
-        Venda.remover_venda(id_venda)
+        # Supondo que View.remover_venda existe e implementa a remoção
+        View.remover_venda(id_venda)
         print("Venda removida com sucesso!")
     
     @classmethod
@@ -295,7 +315,6 @@ class UI:
 
         print("\n===== Simulação de Corrida =====")
         pilotos_atualizados = SimuladorCorrida.simular_corrida(pilotos)
-
         
         for piloto in pilotos_atualizados:
             View.piloto_atualizar(piloto.id, piloto.nome, piloto.equipe, piloto.pontuacao)
@@ -303,9 +322,13 @@ class UI:
         print("\nPontuações atualizadas com sucesso!")
     
     @classmethod
-    def resetar_tabela(cls):
-        for piloto in enumerate(pilotos):
-            View.piloto_atualizar(piloto.id, piloto.nome, piloto.equipe, 0)
-
+    def gerenciar_campeonato_construtores(cls):
+        """Chama a view para gerenciar o campeonato de construtores."""
+        View.gerenciar_campeonato_construtores()
+    
+    @classmethod
+    def resetar_campeonato(cls):
+        """Chama a view para resetar a tabela do campeonato (zerar os resultados)."""
+        View.resetar_campeonato()
 
 UI.main()
