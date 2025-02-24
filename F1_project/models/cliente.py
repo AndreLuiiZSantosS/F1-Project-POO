@@ -1,12 +1,15 @@
 import json
+
 class Cliente:
     def __init__(self, id, nome, senha):
         self.id = id # atributos de instância
         self.nome = nome
         self.senha = senha
+
     def __str__(self):
         return f"{self.id} - {self.nome}"
-
+    
+    
 class Clientes:
     objetos = [] # atributo de classe
     @classmethod

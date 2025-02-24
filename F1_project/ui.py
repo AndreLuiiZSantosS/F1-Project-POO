@@ -1,5 +1,4 @@
 from views import View
-from models.etapas import Etapas
 from templates.abrircontaUI import AbrirContaUI
 from templates.manteringressoUI import ManterIngressoUI
 from templates.simularCorrida import SimuladorCorrida
@@ -145,13 +144,30 @@ class UI:
 
     @classmethod
     def listar_etapas(cls):
-        """Lista todas as etapas cadastradas."""
+        """Lista as etapas (corridas) para as quais o usuário possui ingressos."""
+        if cls.cliente_id is None:
+            print("Nenhum usuário logado.")
+            return
+
+        ingressos = View.listar_ingressos_por_cliente(cls.cliente_id)
+
+        if not ingressos:
+            print("\nVocê não possui ingressos para nenhuma corrida.")
+            return
+
+        etapas_ids = set(ingresso.etapa_id for ingresso in ingressos)
+
         etapas = View.etapa_listar()
-        if not etapas:
-            print("Nenhuma etapa cadastrada.")
-        else:
-            for etapa in etapas:
-                print(etapa)
+
+        etapas_compradas = [etapa for etapa in etapas if etapa.id in etapas_ids]
+
+        if not etapas_compradas:
+            print("\nNenhuma corrida encontrada para os ingressos comprados.")
+            return
+
+        print("\n===== Corridas com Ingressos Comprados =====")
+        for etapa in etapas_compradas:
+            print(f"{etapa.id}. {etapa.nome} - {etapa.data} ({etapa.pista})")
 
     @classmethod
     def adicionar_etapa(cls):
@@ -296,21 +312,36 @@ class UI:
                 print(f"Ingresso para etapa desconhecida (ID: {ingresso.etapa_id})")
         
         delete = input("Digite 'Y' para deletar algum ingresso / Digite 'N' para voltar \n")
-        if delete.lower == "y":
+        if delete.lower() == "y":
             UI.remover_ingresso()
         
     
     @classmethod
     def simular_corrida(cls):
-        """Simula uma corrida e atualiza as pontuações dos pilotos."""
-        pilotos = View.piloto_listar()  
+        """Simula uma corrida e remove o ingresso de menor índice do usuário."""
+        if cls.cliente_id is None:
+            print("Nenhum usuário logado.")
+            return
+        
+        ingressos = View.listar_ingressos_por_cliente(cls.cliente_id)
+
+        if not ingressos:
+            print("\nVocê não possui ingressos para simular uma corrida.")
+            return
+
+        ingresso_mais_antigo = min(ingressos, key=lambda ingresso: ingresso.id)
+
+        View.excluir_ingresso(ingresso_mais_antigo.id)
+        print(f"\nIngresso com ID {ingresso_mais_antigo.id} foi utilizado e removido.")
+
+        pilotos = View.piloto_listar()
         if not pilotos:
             print("Nenhum piloto cadastrado.")
             return
 
         print("\n===== Simulação de Corrida =====")
         pilotos_atualizados = SimuladorCorrida.simular_corrida(pilotos)
-        
+
         for piloto in pilotos_atualizados:
             View.piloto_atualizar(piloto.id, piloto.nome, piloto.equipe, piloto.pontuacao)
 

@@ -1,6 +1,5 @@
 from models.piloto import Piloto, Pilotos
 from models.etapas import Etapas  
-from templates.manteringressoUI import ManterIngressoUI
 from models.carrinho import Carrinho, Carrinhos
 from models.cliente import Cliente, Clientes
 from models.ingresso import Ingresso, Ingressos
