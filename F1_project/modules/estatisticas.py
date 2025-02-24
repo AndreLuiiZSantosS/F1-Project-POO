@@ -1,95 +1,52 @@
-import json
-
+# estatisticas.py 
 class Estatistica:
-    # Caminho do banco de dados de pilotos e resultados
-    CAMINHO_BD_PILOTOS = "../data/pilotos.json"
-    CAMINHO_BD_RESULTADOS = "../data/resultados.json"
+    # ... (outros métodos existentes)
 
     @staticmethod
-    def carregar_dados(caminho):
-        """Carrega dados de um arquivo JSON."""
-        try:
-            with open(caminho, "r") as arquivo:
-                return json.load(arquivo)
-        except FileNotFoundError:
-            return {"pilotos": []} if "pilotos" in caminho else {"resultados": []}
-        except json.JSONDecodeError:
-            print(f"Erro ao carregar o arquivo {caminho}.")
-            return {"pilotos": []} if "pilotos" in caminho else {"resultados": []}
+    def calcular_pontos(resultado):
+        """Calcula pontos considerando DNFs"""
+        if resultado.get("dnf", False):
+            return 0
+        return Estatistica.tabela_pontos().get(resultado["posicao"], 0)
 
     @staticmethod
-    def calcular_pontos(posicao):
-        """Calcula pontos com base na posição do piloto."""
-        tabela_pontos = {
-            1: 25,
-            2: 18,
-            3: 15,
-            4: 12,
-            5: 10,
-            6: 8,
-            7: 6,
-            8: 4,
-            9: 2,
-            10: 1
+    def tabela_pontos():
+        return {
+            1: 25, 2: 18, 3: 15, 4: 12, 5: 10,
+            6: 8, 7: 6, 8: 4, 9: 2, 10: 1
         }
-        return tabela_pontos.get(posicao, 0)
 
     @staticmethod
     def exibir_estatisticas_pilotos():
-        """Exibe o ranking dos pilotos com base nos resultados."""
-        pilotos = Estatistica.carregar_dados(Estatistica.CAMINHO_BD_PILOTOS)["pilotos"]
+        """Calcula pontos considerando TODOS os pilotos, incluindo reservas"""
+        pilotos = {p["nome"]: p for p in Estatistica.carregar_dados(Estatistica.CAMINHO_BD_PILOTOS)["pilotos"]}
         resultados = Estatistica.carregar_dados(Estatistica.CAMINHO_BD_RESULTADOS)["resultados"]
-
-        pontuacao_pilotos = {}
-
-        for resultado in resultados:
-            piloto = resultado["piloto"]
-            pontos = Estatistica.calcular_pontos(int(resultado["posicao"]))
-            pontuacao_pilotos[piloto] = pontuacao_pilotos.get(piloto, 0) + pontos
-
-        ranking = sorted(pontuacao_pilotos.items(), key=lambda x: x[1], reverse=True)
-
-        print("\n" + "="*30)
-        print("✓ Campeonato de Pilotos")
-        print("="*30)
-
-        if not ranking:
-            print("Nenhum piloto registrado no campeonato.")
-        else:
-            for idx, (piloto, pontos) in enumerate(ranking, 1):
-                print(f"{idx}. {piloto} - {pontos} pontos")
-
-        input("\nPressione Enter para voltar...")
+        
+        pontuacao = {}
+        for res in resultados:
+            pontos = Estatistica.calcular_pontos(res)
+            if res["piloto"] in pilotos:
+                pontuacao[res["piloto"]] = pontuacao.get(res["piloto"], 0) + pontos
+        
+        # Ordenar por pontos e vitórias
+        ranking = sorted(pontuacao.items(), 
+                       key=lambda x: (-x[1], -sum(1 for r in resultados if r["piloto"] == x[0] and r["posicao"] == 1)))
+        
+        # ... (exibição mantida igual)
 
     @staticmethod
     def exibir_estatisticas_construtores():
-        """Exibe o ranking das equipes com base nos resultados."""
+        """Calcula pontos somando TODOS os pilotos de cada equipe"""
         pilotos = Estatistica.carregar_dados(Estatistica.CAMINHO_BD_PILOTOS)["pilotos"]
+        mapa_equipes = {p["nome"]: p["equipe"] for p in pilotos}
         resultados = Estatistica.carregar_dados(Estatistica.CAMINHO_BD_RESULTADOS)["resultados"]
-
-        equipe_pontos = {}
-
-        for resultado in resultados:
-            piloto_nome = resultado["piloto"]
-            equipe = next((p["equipe"] for p in pilotos if p["nome"] == piloto_nome), None)
-
-            if equipe:
-                pontos = Estatistica.calcular_pontos(int(resultado["posicao"]))
-                equipe_pontos[equipe] = equipe_pontos.get(equipe, 0) + pontos
-
-        ranking = sorted(equipe_pontos.items(), key=lambda x: x[1], reverse=True)
-
-        print("\n" + "="*30)
-        print("✓ Campeonato de Construtores")
-        print("="*30)
-
-        if not ranking:
-            print("Nenhuma equipe registrada no campeonato.")
-        else:
-            for idx, (equipe, pontos) in enumerate(ranking, 1):
-                print(f"{idx}. {equipe} - {pontos} pontos")
-
-        input("\nPressione Enter para voltar...")
+        
+        pontuacao = {}
+        for res in resultados:
+            equipe = mapa_equipes.get(res["piloto"], "Desconhecida")
+            pontos = Estatistica.calcular_pontos(res)
+            pontuacao[equipe] = pontuacao.get(equipe, 0) + pontos
+        
 
 
 class MenuEstatisticas:

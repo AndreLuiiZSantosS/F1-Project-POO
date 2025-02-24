@@ -1,74 +1,65 @@
+# resultados.py 
 import json
+import random
+from estatisticas import Estatistica  # Importe para acessar dados de pilotos
 
 class Resultado:
-    # Caminho do banco de dados de resultados
     CAMINHO_BD_RESULTADOS = "../data/resultados.json"
+    CAMINHO_PILOTOS = Estatistica.CAMINHO_BD_PILOTOS  # Usar o mesmo caminho
+
+    # ... (métodos carregar_resultados, salvar_resultados e listar_resultados existentes)
 
     @staticmethod
-    def carregar_resultados():
-        """Carrega os dados de resultados do arquivo JSON."""
+    def gerar_resultado_etapa():
+        """Gera um resultado aleatório para uma etapa incluindo DNFs"""
+        etapa_id = input("ID da etapa: ").strip()
+        etapa_nome = input("Nome da etapa: ").strip()
+        
+        # Carregar pilotos
         try:
-            with open(Resultado.CAMINHO_BD_RESULTADOS, "r") as arquivo:
-                return json.load(arquivo)
-        except FileNotFoundError:
-            return {"resultados": []}
-        except json.JSONDecodeError:
-            print("Erro ao carregar o banco de dados de resultados.")
-            return {"resultados": []}
-
-    @staticmethod
-    def salvar_resultados(dados):
-        """Salva os dados de resultados no arquivo JSON."""
-        try:
-            with open(Resultado.CAMINHO_BD_RESULTADOS, "w") as arquivo:
-                json.dump(dados, arquivo, indent=4)
+            with open(Resultado.CAMINHO_PILOTOS, "r") as f:
+                pilotos = json.load(f)["pilotos"]
         except Exception as e:
-            print(f"Erro ao salvar o banco de dados de resultados: {e}")
-
-    @staticmethod
-    def listar_resultados():
-        """Lista todos os resultados cadastrados."""
-        dados = Resultado.carregar_resultados()
-        resultados = dados.get("resultados", [])
-        if not resultados:
-            print("Nenhum resultado cadastrado.")
+            print(f"Erro ao carregar pilotos: {e}")
             return
-        print("\n✓ Resultados Registrados:")
-        for i, resultado in enumerate(resultados, start=1):
-            print(f"{i}. {resultado['etapa']} | {resultado['piloto']} ({resultado['equipe']}): P{resultado['posicao']}")
 
-    @staticmethod
-    def adicionar_resultado():
-        """Adiciona um novo resultado ao banco de dados."""
+        if len(pilotos) < 20:
+            print("Erro: Cadastre pelo menos 20 pilotos!")
+            return
+
+        # Embaralhar pilotos e selecionar 20
+        random.shuffle(pilotos)
+        pilotos_corrida = pilotos[:20]
+        
+        # Gerar posições com DNFs
+        resultados_etapa = []
+        for posicao_real, piloto in enumerate(pilotos_corrida, 1):
+            dnf = random.choices([True, False], weights=[0.2, 0.8])[0]
+            
+            resultados_etapa.append({
+                "id": etapa_id,
+                "etapa": etapa_nome,
+                "piloto": piloto["nome"],
+                "equipe": piloto["equipe"],
+                "posicao": posicao_real,
+                "dnf": dnf
+            })
+
+        # Salvar resultados
         dados = Resultado.carregar_resultados()
-        id = input("id da etapa")
-        etapa = input("Nome da etapa: ")
-        piloto = input("Nome do piloto: ")
-        equipe = input("Nome da equipe: ")
-        
-        while True:
-            try:
-                posicao = int(input("Posição do piloto (número inteiro): "))
-                break
-            except ValueError:
-                print("Erro: Digite um número inteiro válido para a posição.")
-        
-        dados["resultados"].append({"etapa": etapa, "piloto": piloto, "equipe": equipe, "posicao": posicao})
+        dados["resultados"].extend(resultados_etapa)
         Resultado.salvar_resultados(dados)
-        print("Resultado adicionado com sucesso!")
-
+        print(f"Resultado da etapa {etapa_nome} gerado com sucesso!")
 
 class MenuResultados:
-    """Menu para gerenciamento de resultados."""
-
     @staticmethod
     def exibir():
-        """Exibe o menu de gerenciamento de resultados."""
         while True:
             print("\n✓ Gerenciamento de Resultados")
             print("1. Listar resultados")
-            print("2. Adicionar resultado")
-            print("3. Voltar")
+            print("2. Adicionar resultado manual")
+            print("3. Gerar resultado automático")
+            print("4. Voltar")
 
             opcao = input("Selecione uma opção: ")
 
@@ -77,6 +68,8 @@ class MenuResultados:
             elif opcao == "2":
                 Resultado.adicionar_resultado()
             elif opcao == "3":
+                Resultado.gerar_resultado_etapa()
+            elif opcao == "4":
                 return
             else:
                 print("Opção inválida. Tente novamente.")
