@@ -4,6 +4,7 @@ from templates.manteringressoUI import ManterIngressoUI
 from models.carrinho import Carrinho, Carrinhos
 from models.cliente import Cliente, Clientes
 from models.ingresso import Ingresso, Ingressos
+from modules.resultados import Resultados  # Importa o módulo de resultados
 
 class View:
     @staticmethod
@@ -77,9 +78,11 @@ class View:
     def inserir_carrinho(id_produto):
         c = Carrinho(id_produto)
         Carrinhos.inserir(c)
+        
     @staticmethod
     def listar_carrinho():
         return Carrinhos.listar()
+        
     @staticmethod
     def excluir_carrinho(id):
         c = Carrinho(id)
@@ -95,14 +98,17 @@ class View:
     @staticmethod
     def cliente_listar():
         return Clientes.listar()
+        
     @staticmethod
     def cliente_inserir(nome, senha):
         c = Cliente(0, nome, senha)
         Clientes.inserir(c)
+        
     @staticmethod
     def cliente_atualizar(id, nome, senha):
         c = Cliente(id, nome, senha)
         Clientes.atualizar(c)
+        
     @staticmethod
     def cliente_excluir(id):
         c = Cliente(id, "", "")
@@ -122,3 +128,19 @@ class View:
             if etapa.id == etapa_id:
                 return {"nome": etapa.nome, "data": etapa.data}  # Retorna um dicionário com os detalhes
         return None
+
+    @staticmethod
+    def gerenciar_campeonato_construtores():
+        """
+        Chama os métodos do módulo de resultados para gerar (se necessário) 
+        e exibir o campeonato de construtores.
+        """
+        Resultados.gerar_resultados_aleatorios()
+        Resultados.exibir_resultado_construtores()
+    
+    @staticmethod
+    def resetar_campeonato():
+        """
+        Chama o método do módulo de resultados para resetar a tabela do campeonato.
+        """
+        Resultados.resetar_campeonato()
