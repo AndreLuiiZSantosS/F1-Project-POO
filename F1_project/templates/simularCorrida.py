@@ -24,7 +24,7 @@ class SimuladorCorrida:
         for idx, piloto in enumerate(pilotos):
             if idx < len(cls.PONTUACAO_F1):
                 pontuacao_corrida = cls.PONTUACAO_F1[idx]
-                piloto.pontuacao += str(pontuacao_corrida)  
+                piloto.pontuacao += pontuacao_corrida  
                 print(f"{piloto.nome} ({piloto.equipe}) chegou em {idx + 1}º lugar e ganhou {pontuacao_corrida} pontos.")
             else:
                 print(f"{piloto.nome} ({piloto.equipe}) chegou em {idx + 1}º lugar e não pontuou.")

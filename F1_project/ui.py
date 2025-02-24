@@ -3,6 +3,7 @@ from models.etapas import Etapas
 from templates.abrircontaUI import AbrirContaUI
 from templates.manteringressoUI import ManterIngressoUI
 from templates.simularCorrida import SimuladorCorrida
+from models.piloto import Piloto
 
 
 class UI:
@@ -81,6 +82,7 @@ class UI:
                     elif op == 5: UI.piloto_excluir()
                     elif op == 6: UI.gerenciar_estatisticas()
                     elif op == 7: UI.gerenciar_vendas()
+                    elif op == 9: UI.resetar_tabela()
                     elif op == 8: print("Saindo...")
                     else: print("Opção inválida!")
             else:
@@ -299,6 +301,11 @@ class UI:
             View.piloto_atualizar(piloto.id, piloto.nome, piloto.equipe, piloto.pontuacao)
 
         print("\nPontuações atualizadas com sucesso!")
+    
+    @classmethod
+    def resetar_tabela(cls):
+        for piloto in enumerate(pilotos):
+            View.piloto_atualizar(piloto.id, piloto.nome, piloto.equipe, 0)
 
 
 UI.main()
