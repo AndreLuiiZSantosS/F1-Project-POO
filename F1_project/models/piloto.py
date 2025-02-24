@@ -20,7 +20,7 @@ class Pilotos:
          # esvazia a lista de objetos
         cls.objetos = []
         try:
-            with open("pilotos.json", mode="r") as arquivo:
+            with open("pilotos.json", mode="r", encoding="utf-8") as arquivo:
                 # abre o arquivo com a lista de dicionários -> clientes_json
                 clientes_json = json.load(arquivo)
                 # percorre a lista de dicionários
