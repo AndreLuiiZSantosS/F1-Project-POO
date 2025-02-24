@@ -1,6 +1,5 @@
 from models.piloto import Piloto, Pilotos
 from models.etapas import Etapas  
-from models.carrinho import Carrinho, Carrinhos
 from models.cliente import Cliente, Clientes
 from models.ingresso import Ingresso, Ingressos
 from models.resultados import Resultado, Resultados
@@ -57,10 +56,6 @@ class View:
     def etapa_excluir(id):
         """Remove uma etapa."""
         Etapas.remover_etapa(id)
-
-    @staticmethod
-    def criar_carrinho():
-        return Carrinho()
     
     @staticmethod
     def criar_ingresso(etapa_id, dias, qtd):
@@ -73,21 +68,6 @@ class View:
             Ingressos.remover_Ingresso(id_venda)  
         except ValueError:
             print("Erro: ID da venda deve ser um número inteiro.")
-
-
-    @staticmethod
-    def inserir_carrinho(id_produto):
-        c = Carrinho(id_produto)
-        Carrinhos.inserir(c)
-        
-    @staticmethod
-    def listar_carrinho():
-        return Carrinhos.listar()
-        
-    @staticmethod
-    def excluir_carrinho(id):
-        c = Carrinho(id)
-        Carrinhos.excluir(c)
 
     @staticmethod
     def cliente_autenticar(nome, senha):

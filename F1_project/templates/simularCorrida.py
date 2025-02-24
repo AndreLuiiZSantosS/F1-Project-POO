@@ -1,5 +1,4 @@
 import random
-#from models.piloto import piloto
 
 class SimuladorCorrida:
     """Classe para simular corridas e atribuir pontuações aos pilotos."""
