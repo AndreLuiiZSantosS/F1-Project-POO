@@ -66,3 +66,10 @@ class Resultados:
             raise ValueError(f"Resultado com ID {id} não encontrado.")
         cls.objetos.remove(Resultado)
         cls.salvar_Resultados()
+
+    @staticmethod
+    def resetar_campeonato():
+        """Reseta a tabela do campeonato, removendo todos os resultados existentes."""
+        dados_iniciais = {"resultados": []}
+        Resultados.salvar_dados(Resultados.CAMINHO_BD_RESULTADOS, dados_iniciais)
+        print("Tabela do campeonato resetada com sucesso!")
