@@ -93,7 +93,7 @@ class UI:
                     if op == 1: 
                         UI.listar_pilotos()
                     elif op == 2: 
-                        UI.listar_etapas()
+                        UI.listar_etapas_cliente()
                     elif op == 3: 
                         UI.comprar_ingresso()
                     elif op == 4: 
@@ -132,9 +132,16 @@ class UI:
                 return
             else:
                 print("Opção inválida. Tente novamente.")
-
+    
     @classmethod
     def listar_etapas(cls):
+        etapas = View.etapa_listar()
+        etapas_compradas = [etapa for etapa in etapas]
+        for etapa in etapas_compradas:
+            print(f"{etapa.id}. {etapa.nome} - {etapa.data} ({etapa.pista})")
+
+    @classmethod
+    def listar_etapas_cliente(cls):
         """Lista as etapas (corridas) para as quais o usuário possui ingressos."""
         if cls.cliente_id is None:
             print("Nenhum usuário logado.")

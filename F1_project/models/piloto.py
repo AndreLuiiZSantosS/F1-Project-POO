@@ -5,7 +5,7 @@ class Piloto:
         self.id = id
         self.nome = nome
         self.equipe = equipe
-        self.pontuacao = int(pontuacao)
+        self.pontuacao = pontuacao
 
     def __str__(self):
         return f"{self.id} - {self.nome} - {self.equipe} - {self.pontuacao}"

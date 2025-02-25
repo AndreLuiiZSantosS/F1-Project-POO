@@ -1,133 +1,133 @@
 [
     {
         "id": 1,
-        "nome": "Grande Prêmio do Bahrein",
+        "nome": "Grande Pr\u00eamio do Bahrein",
         "data": "2023-03-05",
         "pista": "Circuito Internacional do Bahrein"
     },
     {
         "id": 2,
-        "nome": "Grande Prêmio da Arábia Saudita",
+        "nome": "Grande Pr\u00eamio da Ar\u00e1bia Saudita",
         "data": "2023-03-19",
-        "pista": "Circuito de Rua de Jidá"
+        "pista": "Circuito de Rua de Jid\u00e1"
     },
     {
         "id": 3,
-        "nome": "Grande Prêmio da Austrália",
+        "nome": "Grande Pr\u00eamio da Austr\u00e1lia",
         "data": "2023-04-02",
         "pista": "Circuito de Albert Park"
     },
     {
         "id": 4,
-        "nome": "Grande Prêmio do Azerbaijão",
+        "nome": "Grande Pr\u00eamio do Azerbaij\u00e3o",
         "data": "2023-04-30",
         "pista": "Circuito de Baku"
     },
     {
         "id": 5,
-        "nome": "Grande Prêmio de Miami",
+        "nome": "Grande Pr\u00eamio de Miami",
         "data": "2023-05-07",
-        "pista": "Autódromo Internacional de Miami"
+        "pista": "Aut\u00f3dromo Internacional de Miami"
     },
     {
         "id": 6,
-        "nome": "Grande Prêmio de Mônaco",
+        "nome": "Grande Pr\u00eamio de M\u00f4naco",
         "data": "2023-05-28",
-        "pista": "Circuito de Mônaco"
+        "pista": "Circuito de M\u00f4naco"
     },
     {
         "id": 7,
-        "nome": "Grande Prêmio da Espanha",
+        "nome": "Grande Pr\u00eamio da Espanha",
         "data": "2023-06-04",
         "pista": "Circuito de Barcelona-Catalunha"
     },
     {
         "id": 8,
-        "nome": "Grande Prêmio do Canadá",
+        "nome": "Grande Pr\u00eamio do Canad\u00e1",
         "data": "2023-06-18",
         "pista": "Circuito Gilles Villeneuve"
     },
     {
         "id": 9,
-        "nome": "Grande Prêmio da Áustria",
+        "nome": "Grande Pr\u00eamio da \u00c1ustria",
         "data": "2023-07-02",
         "pista": "Red Bull Ring"
     },
     {
         "id": 10,
-        "nome": "Grande Prêmio da Grã-Bretanha",
+        "nome": "Grande Pr\u00eamio da Gr\u00e3-Bretanha",
         "data": "2023-07-16",
         "pista": "Circuito de Silverstone"
     },
     {
         "id": 11,
-        "nome": "Grande Prêmio da Hungria",
+        "nome": "Grande Pr\u00eamio da Hungria",
         "data": "2023-07-30",
         "pista": "Hungaroring"
     },
     {
         "id": 12,
-        "nome": "Grande Prêmio da Bélgica",
+        "nome": "Grande Pr\u00eamio da B\u00e9lgica",
         "data": "2023-07-30",
         "pista": "Circuito de Spa-Francorchamps"
     },
     {
         "id": 13,
-        "nome": "Grande Prêmio dos Países Baixos",
+        "nome": "Grande Pr\u00eamio dos Pa\u00edses Baixos",
         "data": "2023-08-27",
         "pista": "Circuito de Zandvoort"
     },
     {
         "id": 14,
-        "nome": "Grande Prêmio da Itália",
+        "nome": "Grande Pr\u00eamio da It\u00e1lia",
         "data": "2023-09-03",
-        "pista": "Autódromo Nacional de Monza"
+        "pista": "Aut\u00f3dromo Nacional de Monza"
     },
     {
         "id": 15,
-        "nome": "Grande Prêmio de Singapura",
+        "nome": "Grande Pr\u00eamio de Singapura",
         "data": "2023-09-17",
         "pista": "Circuito de Marina Bay"
     },
     {
         "id": 16,
-        "nome": "Grande Prêmio do Japão",
+        "nome": "Grande Pr\u00eamio do Jap\u00e3o",
         "data": "2023-09-24",
         "pista": "Circuito de Suzuka"
     },
     {
         "id": 17,
-        "nome": "Grande Prêmio do Catar",
+        "nome": "Grande Pr\u00eamio do Catar",
         "data": "2023-10-08",
         "pista": "Circuito Internacional de Losail"
     },
     {
         "id": 18,
-        "nome": "Grande Prêmio dos Estados Unidos",
+        "nome": "Grande Pr\u00eamio dos Estados Unidos",
         "data": "2023-10-22",
-        "pista": "Circuito das Américas"
+        "pista": "Circuito das Am\u00e9ricas"
     },
     {
         "id": 19,
-        "nome": "Grande Prêmio da Cidade do México",
+        "nome": "Grande Pr\u00eamio da Cidade do M\u00e9xico",
         "data": "2023-10-29",
-        "pista": "Autódromo Hermanos Rodríguez"
+        "pista": "Aut\u00f3dromo Hermanos Rodr\u00edguez"
     },
     {
         "id": 20,
-        "nome": "Grande Prêmio de São Paulo",
+        "nome": "Grande Pr\u00eamio de S\u00e3o Paulo",
         "data": "2023-11-05",
-        "pista": "Autódromo de Interlagos"
+        "pista": "Aut\u00f3dromo de Interlagos"
     },
     {
         "id": 21,
-        "nome": "Grande Prêmio de Las Vegas",
+        "nome": "Grande Pr\u00eamio de Las Vegas",
         "data": "2023-11-18",
         "pista": "Circuito de Rua de Las Vegas"
     },
     {
         "id": 22,
-        "nome": "Grande Prêmio de Abu Dhabi",
+        "nome": "Grande Pr\u00eamio de Abu Dhabi",
         "data": "2023-11-26",
         "pista": "Circuito de Yas Marina"
     }
