@@ -93,29 +93,3 @@ class Pilotos:
         for piloto in cls.objetos:
             piloto.pontuacao = 0
         cls.salvar_pilotos()
-
-    @classmethod
-    def menu_admin_pilotos(cls):
-        """Exibe o menu de gerenciamento de pilotos para o administrador."""
-        while True:
-            print("\n=== Gerenciamento de Pilotos ===")
-            print("1. Listar Pilotos")
-            print("2. Adicionar Piloto")
-            print("3. Editar Piloto")
-            print("4. Remover Piloto")
-            print("5. Voltar")
-
-            opcao = input("Escolha uma opção: ")
-
-            if opcao == "1":
-                cls.listar_pilotos()
-            elif opcao == "2":
-                cls.adicionar_piloto()
-            elif opcao == "3":
-                cls.editar_piloto()
-            elif opcao == "4":
-                cls.remover_piloto()
-            elif opcao == "5":
-                return
-            else:
-                print("Opção inválida. Tente novamente.")

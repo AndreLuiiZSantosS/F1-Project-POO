@@ -2,7 +2,6 @@ from models.piloto import Piloto, Pilotos
 from models.etapas import Etapas  
 from models.cliente import Cliente, Clientes
 from models.ingresso import Ingresso, Ingressos
-from models.resultados import Resultado, Resultados
 
 
 class View:
@@ -109,15 +108,6 @@ class View:
             if etapa.id == etapa_id:
                 return {"nome": etapa.nome, "data": etapa.data}  # Retorna um dicionário com os detalhes
         return None
-
-    @staticmethod
-    def gerenciar_campeonato_construtores():
-        """
-        Chama os métodos do módulo de resultados para gerar (se necessário) 
-        e exibir o campeonato de construtores.
-        """
-        Resultados.gerar_resultados_aleatorios()
-        Resultados.exibir_resultado_construtores()
     
     @staticmethod
     def resetar_pontuacoes():

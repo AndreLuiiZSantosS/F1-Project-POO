@@ -32,7 +32,7 @@ class UI:
         else:
             print("Usuário ou senha incorretos.")
             return False
-    
+        
     @staticmethod
     def menu_admin():
         """Menu específico para administradores."""
@@ -42,10 +42,7 @@ class UI:
         print("3. Listar Pilotos")
         print("4. Editar Piloto")
         print("5. Excluir Piloto")
-        print("6. Gerenciar Estatísticas")
-        print("7. Gerenciar Vendas")
-        print("8. Gerenciar Campeonato de Construtores")
-        print("9. Resetar Campeonato")
+        print("6. Resetar Campeonato")
         print("10. Sair")
         return int(input("Informe uma opção: "))
 
@@ -71,7 +68,7 @@ class UI:
         if UI.login():
             if UI.is_admin:
                 op = 0
-                while op != 10:  # 10 é a opção de sair no menu admin
+                while op != 10:  
                     op = UI.menu_admin()
                     if op == 1: 
                         UI.gerenciar_etapas()
@@ -84,12 +81,6 @@ class UI:
                     elif op == 5: 
                         UI.piloto_excluir()
                     elif op == 6: 
-                        UI.gerenciar_estatisticas()
-                    elif op == 7: 
-                        UI.gerenciar_vendas()
-                    elif op == 8: 
-                        UI.gerenciar_campeonato_construtores()
-                    elif op == 9: 
                         UI.resetar_pontuacoes()
                     elif op == 10: 
                         print("Saindo...")
@@ -210,11 +201,10 @@ class UI:
         if len(pilotos) == 0:
             print("Nenhum piloto cadastrado")
         else:    
-            for piloto in pilotos:
-                pilotos_ordenados = sorted(pilotos, key=lambda piloto: piloto.pontuacao, reverse=True)
-                print("\n===== Lista de Pilotos =====")
-                for idx, piloto in enumerate(pilotos_ordenados, 1):
-                    print(f"{idx}. {piloto.nome} ({piloto.equipe}) - Pontuação: {piloto.pontuacao}")
+            pilotos_ordenados = sorted(pilotos, key=lambda piloto: piloto.pontuacao, reverse=True)
+            print("\n===== Lista de Pilotos =====")
+            for idx, piloto in enumerate(pilotos_ordenados, 1):
+                print(f"{idx}. {piloto.nome} ({piloto.equipe}) - Pontuação: {piloto.pontuacao}")
 
     @classmethod 
     def piloto_atualizar(cls):
@@ -293,7 +283,6 @@ class UI:
             print("Nenhum usuário logado.")
             return
 
-        # Obtém os ingressos do usuário logado
         ingressos = View.listar_ingressos_por_cliente(cls.cliente_id)
 
         if not ingressos:
@@ -302,7 +291,6 @@ class UI:
 
         print("\n===== Meus Ingressos =====")
         for ingresso in ingressos:
-            # Busca os detalhes da etapa usando a classe View
             etapa = View.buscar_etapa_por_id(ingresso.etapa_id)
             if etapa:
                 print(f"ID: {ingresso.id} - Evento: {etapa['nome']} - Data: {etapa['data']}")
@@ -361,5 +349,6 @@ class UI:
             print("Pontuações dos pilotos resetadas com sucesso!")
         else:
             print("Operação cancelada.")
+    
 
 UI.main()
