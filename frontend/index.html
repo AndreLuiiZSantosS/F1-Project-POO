@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>F1 Results Hub</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="/" data-route aria-label="F1 Results Hub">
+          <span class="brand-mark">F1</span>
+          <span>
+            <strong>Results Hub</strong>
+            <small>Resultados cadastrados pelo admin</small>
+          </span>
+        </a>
+
+        <nav class="primary-nav" aria-label="Navegacao principal">
+          <a class="nav-button" href="/resultados" data-route data-nav>Resultados</a>
+          <a class="nav-button" href="/etapas" data-route data-nav>Etapas</a>
+          <a class="nav-button" href="/pilotos" data-route data-nav>Pilotos</a>
+          <a class="nav-button" href="/equipes" data-route data-nav>Equipes</a>
+          <a class="nav-button" href="/classificacao" data-route data-nav>Classificacao</a>
+          <a class="nav-button" href="/previsoes" data-route data-nav>Previsoes</a>
+          <a class="nav-button" href="/ranking-usuarios" data-route data-nav>Ranking</a>
+          <a class="nav-button admin-link" href="/admin" data-route data-nav data-admin-link hidden>Admin</a>
+          <a class="nav-button" href="/login" data-route data-nav id="auth-nav-link">Entrar</a>
+          <a class="nav-button" href="/mapa" data-route data-nav>Mapa</a>
+        </nav>
+      </header>
+
+      <main>
+        <section class="race-control" aria-label="Resumo da pagina" id="page-hero">
+          <div class="track-ribbon" aria-hidden="true"></div>
+          <div class="control-copy">
+            <span class="eyebrow">Race Control</span>
+            <h1>Carregando resultados</h1>
+          </div>
+          <div class="stat-strip" id="summary-stats"></div>
+        </section>
+
+        <section class="view active page" id="page-root" aria-live="polite"></section>
+      </main>
+    </div>
+
+    <script src="/shared/domain.js"></script>
+    <script type="module" src="/src/app.js"></script>
+  </body>
+</html>
