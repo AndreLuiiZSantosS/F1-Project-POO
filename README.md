@@ -15,7 +15,7 @@ As pastas antigas `backend/` e `F1_project/` ficaram como legado da tentativa an
 
 ## Rodar
 
-Requisitos: Node.js 20 ou superior.
+Requisitos: Node.js 20.19 ou superior.
 
 Com duplo clique:
 
@@ -74,5 +74,6 @@ Nas previsoes, o usuario pontua quando acerta piloto e posicao final. Os pontos 
 ## Testes
 
 ```powershell
-node --test api/tests/*.test.js
+npm --prefix api run lint
+npm --prefix api test
 ```

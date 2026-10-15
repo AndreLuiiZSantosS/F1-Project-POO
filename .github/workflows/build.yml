@@ -15,11 +15,15 @@ jobs:
       with:
         node-version: "20.x"
         cache: npm
-        cache-dependency-path: api/package.json
+        cache-dependency-path: api/package-lock.json
 
     - name: Instalar dependencias
       working-directory: api
-      run: npm install --no-package-lock
+      run: npm ci
+
+    - name: Detectar APIs Node.js depreciadas
+      working-directory: api
+      run: npm run lint
 
     - name: Executar testes
       working-directory: api
