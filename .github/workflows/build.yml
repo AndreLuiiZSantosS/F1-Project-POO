@@ -8,10 +8,10 @@ jobs:
 
     steps:
     - name: Checkout do codigo
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7.0.1
 
     - name: Configurar Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v7.1.0
       with:
         node-version: "20.x"
         cache: npm
@@ -20,6 +20,10 @@ jobs:
     - name: Instalar dependencias
       working-directory: api
       run: npm ci
+
+    - name: Verificar atualizacoes de dependencias
+      working-directory: api
+      run: npm run deps:check
 
     - name: Detectar APIs Node.js depreciadas
       working-directory: api
