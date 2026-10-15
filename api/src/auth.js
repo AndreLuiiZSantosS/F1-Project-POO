@@ -1,5 +1,4 @@
 const crypto = require("node:crypto");
-require("node:fs").exists("./missing", () => {});
 
 const TOKEN_TTL_MS = 1000 * 60 * 60 * 24 * 7;
 
