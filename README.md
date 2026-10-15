@@ -76,4 +76,11 @@ Nas previsoes, o usuario pontua quando acerta piloto e posicao final. Os pontos 
 ```powershell
 npm --prefix api run lint
 npm --prefix api test
+npm --prefix api run deps:check
+```
+
+Para atualizar dependencias npm dentro da faixa suportada pelo Node do projeto:
+
+```powershell
+npm --prefix api run deps:update
 ```
