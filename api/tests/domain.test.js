@@ -15,7 +15,7 @@ test("gera sessoes de etapa normal com tres TLs, Q1-Q3 e corrida", () => {
 
   assert.deepEqual(
     sessions.map((session) => session.type),
-    ["FP1", "FP2", "FP3", "Q1", "Q2", "Q3", "RACE"]
+    ["FP1", "FP2", "FP3", "Q1", "Q2", "Q3", "RACE"],
   );
 });
 
@@ -28,7 +28,7 @@ test("gera sessoes sprint com treino reduzido, sprint quali e corrida sprint", (
 
   assert.deepEqual(
     sessions.map((session) => session.type),
-    ["FP1", "Q1", "Q2", "Q3", "SPRINT_QUALIFYING", "SPRINT", "RACE"]
+    ["FP1", "Q1", "Q2", "Q3", "SPRINT_QUALIFYING", "SPRINT", "RACE"],
   );
 });
 

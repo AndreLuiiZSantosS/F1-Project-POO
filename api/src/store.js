@@ -3,7 +3,7 @@ const path = require("node:path");
 
 const { DATA_FILE } = require("./config");
 
-function emptyDatabase() {
+function emptyDatabase () {
   return {
     meta: {
       version: 1,
@@ -27,7 +27,7 @@ function emptyDatabase() {
   };
 }
 
-function ensureShape(database) {
+function ensureShape (database) {
   const shaped = database && typeof database === "object" ? database : emptyDatabase();
   shaped.meta = shaped.meta && typeof shaped.meta === "object" ? shaped.meta : {};
   shaped.meta.version = shaped.meta.version || 1;
@@ -44,38 +44,38 @@ function ensureShape(database) {
   shaped.meta.nextIds.team = Math.max(
     shaped.meta.nextIds.team || 1,
     ...shaped.teams.map((item) => Number(item.id) + 1),
-    1
+    1,
   );
   shaped.meta.nextIds.driver = Math.max(
     shaped.meta.nextIds.driver || 1,
     ...shaped.drivers.map((item) => Number(item.id) + 1),
-    1
+    1,
   );
   shaped.meta.nextIds.event = Math.max(
     shaped.meta.nextIds.event || 1,
     ...shaped.events.map((item) => Number(item.id) + 1),
-    1
+    1,
   );
   shaped.meta.nextIds.result = Math.max(
     shaped.meta.nextIds.result || 1,
     ...shaped.results.map((item) => Number(item.id) + 1),
-    1
+    1,
   );
   shaped.meta.nextIds.user = Math.max(
     shaped.meta.nextIds.user || 1,
     ...shaped.users.map((item) => Number(item.id) + 1),
-    1
+    1,
   );
   shaped.meta.nextIds.prediction = Math.max(
     shaped.meta.nextIds.prediction || 1,
     ...shaped.predictions.map((item) => Number(item.id) + 1),
-    1
+    1,
   );
 
   return shaped;
 }
 
-async function readDatabase() {
+async function readDatabase () {
   try {
     const raw = await fs.readFile(DATA_FILE, "utf8");
     return ensureShape(JSON.parse(raw));
@@ -90,7 +90,7 @@ async function readDatabase() {
   }
 }
 
-async function writeDatabase(database) {
+async function writeDatabase (database) {
   const shaped = ensureShape(database);
   shaped.meta.updatedAt = new Date().toISOString();
   await fs.mkdir(path.dirname(DATA_FILE), { recursive: true });
@@ -100,13 +100,13 @@ async function writeDatabase(database) {
   return shaped;
 }
 
-function nextId(database, collectionName) {
+function nextId (database, collectionName) {
   const current = database.meta.nextIds[collectionName] || 1;
   database.meta.nextIds[collectionName] = current + 1;
   return current;
 }
 
-async function mutateDatabase(mutator) {
+async function mutateDatabase (mutator) {
   const database = await readDatabase();
   const result = await mutator(database);
   await writeDatabase(database);

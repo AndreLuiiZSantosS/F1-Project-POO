@@ -99,7 +99,7 @@ const declaredPages = [
   ["/mapa", "Mapa do app"],
 ];
 
-function escapeHtml(value) {
+function escapeHtml (value) {
   return String(value ?? "")
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
@@ -108,7 +108,7 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
-function initials(value) {
+function initials (value) {
   return String(value || "F1")
     .split(/\s+/)
     .filter(Boolean)
@@ -117,37 +117,37 @@ function initials(value) {
     .join("");
 }
 
-function pluralize(count, singular, plural) {
+function pluralize (count, singular, plural) {
   return count === 1 ? singular : plural;
 }
 
-function formatDate(value) {
+function formatDate (value) {
   if (!value) return "Data aberta";
   const [year, month, day] = value.split("-");
   return year && month && day ? `${day}/${month}/${year}` : value;
 }
 
-function isAdmin() {
+function isAdmin () {
   return state.currentUser?.role === "admin";
 }
 
-function pathForEvent(event) {
+function pathForEvent (event) {
   return `/etapas/${event.id}`;
 }
 
-function pathForSession(event, session) {
+function pathForSession (event, session) {
   return `${pathForEvent(event)}/${SESSION_SLUGS[session.type] || session.type.toLowerCase()}`;
 }
 
-function byId(rows, id) {
+function byId (rows, id) {
   return rows.find((row) => Number(row.id) === Number(id)) || null;
 }
 
-function getSession(event, sessionType) {
+function getSession (event, sessionType) {
   return event?.sessions.find((session) => session.type === sessionType) || null;
 }
 
-async function apiFetch(path, options = {}) {
+async function apiFetch (path, options = {}) {
   const headers = {
     "Content-Type": "application/json",
     ...(state.token ? { Authorization: `Bearer ${state.token}` } : {}),
@@ -165,7 +165,7 @@ async function apiFetch(path, options = {}) {
   return payload;
 }
 
-function setToken(token) {
+function setToken (token) {
   state.token = token || "";
   if (state.token) {
     localStorage.setItem("f1-auth-token", state.token);
@@ -174,7 +174,7 @@ function setToken(token) {
   }
 }
 
-function setHero(kicker, title, subtitle = "") {
+function setHero (kicker, title, subtitle = "") {
   elements.pageHero.querySelector(".control-copy").innerHTML = `
     <span class="eyebrow">${escapeHtml(kicker)}</span>
     <h1>${escapeHtml(title)}</h1>
@@ -182,10 +182,10 @@ function setHero(kicker, title, subtitle = "") {
   `;
 }
 
-function renderSummary() {
+function renderSummary () {
   const resultCount = state.events.reduce(
     (total, event) => total + event.sessions.reduce((subtotal, session) => subtotal + session.results.length, 0),
-    0
+    0,
   );
   const sprintCount = state.events.filter((event) => event.hasSprint).length;
   const predictedCount = state.myPredictions.length;
@@ -205,7 +205,7 @@ function renderSummary() {
   `).join("");
 }
 
-function updateAuthNav() {
+function updateAuthNav () {
   elements.adminLinks.forEach((link) => {
     link.hidden = !isAdmin();
   });
@@ -214,7 +214,7 @@ function updateAuthNav() {
   }
 }
 
-function teamBadge(team, className = "") {
+function teamBadge (team, className = "") {
   const color = team?.color || "#e10600";
   const label = team?.shortName || team?.name || "Equipe";
   if (team?.emblemUrl) {
@@ -232,7 +232,7 @@ function teamBadge(team, className = "") {
   `;
 }
 
-function driverToken(driver) {
+function driverToken (driver) {
   const team = driver?.team;
   return `
     <a class="driver-token linked-token" href="/pilotos/${escapeHtml(driver?.id || "")}" data-route>
@@ -245,11 +245,11 @@ function driverToken(driver) {
   `;
 }
 
-function actionLink(href, label, variant = "") {
+function actionLink (href, label, variant = "") {
   return `<a class="action-link ${variant}" href="${escapeHtml(href)}" data-route>${escapeHtml(label)}</a>`;
 }
 
-function sectionHead(kicker, title, aside = "") {
+function sectionHead (kicker, title, aside = "") {
   return `
     <div class="section-head">
       <div>
@@ -261,7 +261,7 @@ function sectionHead(kicker, title, aside = "") {
   `;
 }
 
-function emptyState(title, body, aside = "") {
+function emptyState (title, body, aside = "") {
   return `
     <div class="empty-state">
       <h3>${escapeHtml(title)}</h3>
@@ -271,7 +271,7 @@ function emptyState(title, body, aside = "") {
   `;
 }
 
-function adminGate() {
+function adminGate () {
   if (isAdmin()) {
     return "";
   }
@@ -281,7 +281,7 @@ function adminGate() {
   return emptyState("Acesso bloqueado", "Sua conta pode ver resultados e criar previsoes, mas nao pode alterar dados oficiais.", actionLink("/", "Voltar ao painel", "primary"));
 }
 
-function resultTable(results) {
+function resultTable (results) {
   const rows = results.length
     ? results.map((result) => `
       <tr>
@@ -293,7 +293,7 @@ function resultTable(results) {
         <td class="points-cell">${escapeHtml(result.points || 0)}</td>
       </tr>
     `).join("")
-    : `<tr><td colspan="6" class="empty-row">Aguardando resultado cadastrado.</td></tr>`;
+    : "<tr><td colspan=\"6\" class=\"empty-row\">Aguardando resultado cadastrado.</td></tr>";
 
   return `
     <div class="table-scroll">
@@ -314,7 +314,7 @@ function resultTable(results) {
   `;
 }
 
-function sessionCard(event, session) {
+function sessionCard (event, session) {
   return `
     <article class="session-block">
       <header>
@@ -329,7 +329,7 @@ function sessionCard(event, session) {
   `;
 }
 
-function eventCover(event) {
+function eventCover (event) {
   return `
     <div class="event-cover">
       <span class="round-number">Round ${escapeHtml(event.round)}</span>
@@ -345,7 +345,7 @@ function eventCover(event) {
   `;
 }
 
-function eventCard(event) {
+function eventCard (event) {
   const filledSessions = event.sessions.filter((session) => session.results.length).length;
   return `
     <article class="route-card event-card">
@@ -367,7 +367,7 @@ function eventCard(event) {
   `;
 }
 
-function driverCard(driver) {
+function driverCard (driver) {
   return `
     <article class="driver-card" style="--team-color:${escapeHtml(driver.team?.color || "#e10600")}">
       <div class="driver-photo">
@@ -384,7 +384,7 @@ function driverCard(driver) {
   `;
 }
 
-function teamCard(team) {
+function teamCard (team) {
   const teamDrivers = state.drivers.filter((driver) => Number(driver.teamId) === Number(team.id));
   return `
     <article class="team-card" style="--team-color:${escapeHtml(team.color)}">
@@ -408,7 +408,7 @@ function teamCard(team) {
   `;
 }
 
-function standingsTable(rows, type) {
+function standingsTable (rows, type) {
   if (!rows.length) return '<div class="empty-state compact">Sem dados para classificacao.</div>';
 
   return `
@@ -444,7 +444,7 @@ function standingsTable(rows, type) {
   `;
 }
 
-function renderDashboard() {
+function renderDashboard () {
   setHero("Dashboard", "F1 Results Hub", `${declaredPages.length} paginas/rotas, resultados reais cadastrados e previsoes de usuarios`);
   const latestEvent = state.events.findLast((event) => event.sessions.some((session) => session.results.length)) || state.events[0];
   return `
@@ -486,7 +486,7 @@ function renderDashboard() {
   `;
 }
 
-function renderLogin() {
+function renderLogin () {
   setHero("Conta", state.currentUser ? "Sua conta" : "Entrar", state.currentUser ? "Sessao ativa neste navegador" : "Login de usuario ou admin");
 
   if (state.currentUser) {
@@ -529,7 +529,7 @@ function renderLogin() {
   `;
 }
 
-function renderRegister() {
+function renderRegister () {
   setHero("Registro", "Criar conta", "Conta comum para previsoes e ranking");
   if (state.currentUser) {
     return emptyState("Voce ja esta logado", "Saia da conta atual para criar outro usuario.", actionLink("/login", "Ver conta", "primary"));
@@ -549,7 +549,7 @@ function renderRegister() {
   `;
 }
 
-function renderResults() {
+function renderResults () {
   setHero("Resultados", "Todas as etapas", "Cada sessao tem sua propria pagina");
   const aside = isAdmin() ? actionLink("/admin/resultados", "Adicionar resultado", "primary") : actionLink("/previsoes", "Criar previsao", "primary");
   if (!state.events.length) return `${sectionHead("Etapas", "Resultados")}${emptyState("Sem etapas", "Cadastre etapas no painel admin.")}`;
@@ -559,7 +559,7 @@ function renderResults() {
   `;
 }
 
-function renderEvents() {
+function renderEvents () {
   setHero("Calendario", "Etapas cadastradas", "Fim de semana tradicional ou sprint");
   const aside = isAdmin() ? actionLink("/admin/etapas", "Nova etapa", "primary") : "";
   return `
@@ -568,7 +568,7 @@ function renderEvents() {
   `;
 }
 
-function renderEventDetail(eventId) {
+function renderEventDetail (eventId) {
   const event = byId(state.events, eventId);
   if (!event) {
     setHero("Etapa", "Etapa nao encontrada");
@@ -585,7 +585,7 @@ function renderEventDetail(eventId) {
   `;
 }
 
-function renderEventSession(eventId, sessionSlug) {
+function renderEventSession (eventId, sessionSlug) {
   const event = byId(state.events, eventId);
   const sessionType = SLUG_TO_SESSION[sessionSlug];
   const session = getSession(event, sessionType);
@@ -615,7 +615,7 @@ function renderEventSession(eventId, sessionSlug) {
   `;
 }
 
-function renderDrivers() {
+function renderDrivers () {
   setHero("Grid", "Pilotos", "Numero, equipe e detalhes individuais");
   const aside = isAdmin() ? actionLink("/admin/pilotos", "Novo piloto", "primary") : "";
   return `
@@ -624,7 +624,7 @@ function renderDrivers() {
   `;
 }
 
-function renderDriverDetail(driverId) {
+function renderDriverDetail (driverId) {
   const driver = byId(state.drivers, driverId);
   if (!driver) {
     setHero("Piloto", "Piloto nao encontrado");
@@ -635,8 +635,8 @@ function renderDriverDetail(driverId) {
     event.sessions.flatMap((session) =>
       session.results
         .filter((result) => Number(result.driverId) === Number(driver.id))
-        .map((result) => ({ event, session, result }))
-    )
+        .map((result) => ({ event, session, result })),
+    ),
   );
 
   setHero(`#${driver.number}`, driver.name, driver.team?.name || "Sem equipe");
@@ -666,7 +666,7 @@ function renderDriverDetail(driverId) {
   `;
 }
 
-function renderTeams() {
+function renderTeams () {
   setHero("Garagens", "Equipes", "Emblemas, cores, pilotos e dados de base");
   const aside = isAdmin() ? actionLink("/admin/equipes", "Nova equipe", "primary") : "";
   return `
@@ -675,7 +675,7 @@ function renderTeams() {
   `;
 }
 
-function renderTeamDetail(teamId) {
+function renderTeamDetail (teamId) {
   const team = byId(state.teams, teamId);
   if (!team) {
     setHero("Equipe", "Equipe nao encontrada");
@@ -696,7 +696,7 @@ function renderTeamDetail(teamId) {
   `;
 }
 
-function renderStandingsOverview() {
+function renderStandingsOverview () {
   setHero("Pontos", "Classificacao", "Pilotos e equipes separados");
   return `
     ${sectionHead("Classificacao", "Tabelas do campeonato")}
@@ -715,32 +715,32 @@ function renderStandingsOverview() {
   `;
 }
 
-function renderDriverStandingsPage() {
+function renderDriverStandingsPage () {
   setHero("Pilotos", "Classificacao de pilotos");
   return `${sectionHead("Classificacao", "Pilotos", actionLink("/classificacao", "Voltar"))}<div class="table-panel">${standingsTable(state.standings.drivers || [], "drivers")}</div>`;
 }
 
-function renderTeamStandingsPage() {
+function renderTeamStandingsPage () {
   setHero("Equipes", "Classificacao de equipes");
   return `${sectionHead("Classificacao", "Equipes", actionLink("/classificacao", "Voltar"))}<div class="table-panel">${standingsTable(state.standings.teams || [], "teams")}</div>`;
 }
 
-function predictionOpenSessions() {
+function predictionOpenSessions () {
   return state.events.flatMap((event) =>
     event.sessions
       .filter((session) => session.pointsSession && !session.results.length)
-      .map((session) => ({ event, session }))
+      .map((session) => ({ event, session })),
   );
 }
 
-function selectedPredictionTarget() {
+function selectedPredictionTarget () {
   const open = predictionOpenSessions();
   if (!open.length) return null;
 
   let target = open.find(
     (item) =>
       Number(item.event.id) === Number(state.selectedPredictionEventId) &&
-      item.session.type === state.selectedPredictionSession
+      item.session.type === state.selectedPredictionSession,
   );
 
   if (!target) {
@@ -752,7 +752,7 @@ function selectedPredictionTarget() {
   return target;
 }
 
-function renderPredictions() {
+function renderPredictions () {
   setHero("Previsoes", "Monte seu grid", "Acertou piloto e posicao, ganhou os pontos reais daquele resultado");
   if (!state.currentUser) {
     return emptyState("Entre para jogar", "Crie uma conta ou faca login para salvar previsoes.", actionLink("/login", "Entrar", "primary"));
@@ -803,7 +803,7 @@ function renderPredictions() {
   `;
 }
 
-function predictionCard(prediction) {
+function predictionCard (prediction) {
   const score = prediction.score || {};
   return `
     <article class="route-card prediction-card">
@@ -829,7 +829,7 @@ function predictionCard(prediction) {
   `;
 }
 
-function renderMyPredictions() {
+function renderMyPredictions () {
   setHero("Previsoes", "Minhas previsoes", "Historico e pontuacao calculada pelo backend");
   if (!state.currentUser) {
     return emptyState("Entre para ver suas previsoes", "Suas previsoes ficam vinculadas a conta.", actionLink("/login", "Entrar", "primary"));
@@ -841,7 +841,7 @@ function renderMyPredictions() {
   `;
 }
 
-function renderUserLeaderboard() {
+function renderUserLeaderboard () {
   setHero("Ranking", "Usuarios", "Pontuacao das previsoes ja avaliadas");
   const rows = state.leaderboard.length
     ? state.leaderboard.map((row, index) => `
@@ -872,7 +872,7 @@ function renderUserLeaderboard() {
   `;
 }
 
-function adminSessionPanel() {
+function adminSessionPanel () {
   return `
     <div class="admin-card admin-session">
       <strong>Admin conectado</strong>
@@ -882,7 +882,7 @@ function adminSessionPanel() {
   `;
 }
 
-function adminNav() {
+function adminNav () {
   return `
     <div class="route-grid admin-routes">
       ${actionLink("/admin/equipes", "Cadastrar equipes", "primary")}
@@ -893,7 +893,7 @@ function adminNav() {
   `;
 }
 
-function renderAdminHome() {
+function renderAdminHome () {
   setHero("Admin", "Painel de controle", "Cadastros integrados ao proprio site");
   const gate = adminGate();
   if (gate) return gate;
@@ -904,7 +904,7 @@ function renderAdminHome() {
   `;
 }
 
-function renderAdminTeams() {
+function renderAdminTeams () {
   setHero("Admin", "Cadastrar equipe");
   const gate = adminGate();
   if (gate) return gate;
@@ -928,7 +928,7 @@ function renderAdminTeams() {
   `;
 }
 
-function renderAdminDrivers() {
+function renderAdminDrivers () {
   setHero("Admin", "Cadastrar piloto");
   const gate = adminGate();
   if (gate) return gate;
@@ -950,7 +950,7 @@ function renderAdminDrivers() {
   `;
 }
 
-function renderAdminEvents() {
+function renderAdminEvents () {
   setHero("Admin", "Cadastrar etapa");
   const gate = adminGate();
   if (gate) return gate;
@@ -975,7 +975,7 @@ function renderAdminEvents() {
   `;
 }
 
-function renderAdminResults() {
+function renderAdminResults () {
   setHero("Admin", "Cadastrar resultado");
   const gate = adminGate();
   if (gate) return gate;
@@ -1002,7 +1002,7 @@ function renderAdminResults() {
   `;
 }
 
-function renderSitemap() {
+function renderSitemap () {
   setHero("Mapa", `${declaredPages.length} paginas/rotas`, "Estrutura navegavel por area");
   const firstEvent = state.events[0];
   const firstDriver = state.drivers[0];
@@ -1015,39 +1015,39 @@ function renderSitemap() {
           .replace(":id", firstEvent?.id || firstDriver?.id || firstTeam?.id || "1");
         const resolvedHref = path.startsWith("/pilotos/:id") ? `/pilotos/${firstDriver?.id || 1}`
           : path.startsWith("/equipes/:id") ? `/equipes/${firstTeam?.id || 1}`
-          : path.startsWith("/etapas/:id") ? path.replace(":id", firstEvent?.id || 1)
-          : href;
-        const adminTag = path.startsWith("/admin") ? `<span class="admin-route-tag">Admin</span>` : "";
+            : path.startsWith("/etapas/:id") ? path.replace(":id", firstEvent?.id || 1)
+              : href;
+        const adminTag = path.startsWith("/admin") ? "<span class=\"admin-route-tag\">Admin</span>" : "";
         return `<article class="route-card"><code>${escapeHtml(path)}</code><h3>${escapeHtml(label)}</h3>${adminTag}${actionLink(resolvedHref, "Abrir")}</article>`;
       }).join("")}
     </div>
   `;
 }
 
-function teamOptions(selectedId = "") {
+function teamOptions (selectedId = "") {
   return `<option value="">Equipe</option>${state.teams.map((team) => `<option value="${escapeHtml(team.id)}" ${Number(selectedId) === Number(team.id) ? "selected" : ""}>${escapeHtml(team.name)}</option>`).join("")}`;
 }
 
-function driverOptions(selectedId = "") {
+function driverOptions (selectedId = "") {
   return `<option value="">Piloto</option>${state.drivers.map((driver) => `<option value="${escapeHtml(driver.id)}" ${Number(selectedId) === Number(driver.id) ? "selected" : ""}>${escapeHtml(driver.number)} - ${escapeHtml(driver.name)}</option>`).join("")}`;
 }
 
-function formPayload(form) {
+function formPayload (form) {
   return Object.fromEntries(new FormData(form).entries());
 }
 
-function setStatus(selector, message, variant = "ok") {
+function setStatus (selector, message, variant = "ok") {
   const status = document.querySelector(selector);
   if (!status) return;
   status.textContent = message;
   status.dataset.variant = variant;
 }
 
-function setAdminStatus(message, variant = "ok") {
+function setAdminStatus (message, variant = "ok") {
   setStatus("#admin-status", message, variant);
 }
 
-async function submitAdminForm(form, path, transform = (payload) => payload) {
+async function submitAdminForm (form, path, transform = (payload) => payload) {
   const payload = transform(formPayload(form));
   await apiFetch(path, {
     method: "POST",
@@ -1057,13 +1057,13 @@ async function submitAdminForm(form, path, transform = (payload) => payload) {
   await loadData(false);
 }
 
-function navigate(path) {
+function navigate (path) {
   history.pushState({}, "", path);
   renderRoute();
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-function bindAuthEvents() {
+function bindAuthEvents () {
   document.querySelector("#login-form")?.addEventListener("submit", async (event) => {
     event.preventDefault();
     try {
@@ -1112,7 +1112,7 @@ function bindAuthEvents() {
   });
 }
 
-function bindPredictionEvents() {
+function bindPredictionEvents () {
   const eventSelect = document.querySelector("#prediction-event-select");
   eventSelect?.addEventListener("change", () => {
     state.selectedPredictionEventId = eventSelect.value;
@@ -1156,7 +1156,7 @@ function bindPredictionEvents() {
   });
 }
 
-function bindAdminEvents() {
+function bindAdminEvents () {
   document.querySelector("#team-form")?.addEventListener("submit", async (event) => {
     event.preventDefault();
     try {
@@ -1213,13 +1213,13 @@ function bindAdminEvents() {
   });
 }
 
-function bindPageEvents() {
+function bindPageEvents () {
   bindAuthEvents();
   bindPredictionEvents();
   bindAdminEvents();
 }
 
-function updateActiveNav() {
+function updateActiveNav () {
   const path = window.location.pathname;
   elements.navLinks.forEach((link) => {
     const href = link.getAttribute("href");
@@ -1227,7 +1227,7 @@ function updateActiveNav() {
   });
 }
 
-function matchRoute(path) {
+function matchRoute (path) {
   for (const route of routes) {
     const match = path.match(route.pattern);
     if (match) {
@@ -1237,7 +1237,7 @@ function matchRoute(path) {
   return null;
 }
 
-function renderRoute() {
+function renderRoute () {
   const path = window.location.pathname;
   const match = matchRoute(path);
   updateAuthNav();
@@ -1254,7 +1254,7 @@ function renderRoute() {
   bindPageEvents();
 }
 
-async function loadData(shouldRender = true) {
+async function loadData (shouldRender = true) {
   const [snapshot, standings, meta, leaderboard] = await Promise.all([
     apiFetch("/snapshot"),
     apiFetch("/standings"),

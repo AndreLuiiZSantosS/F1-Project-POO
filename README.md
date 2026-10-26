@@ -73,11 +73,15 @@ Nas previsoes, o usuario pontua quando acerta piloto e posicao final. Os pontos 
 
 ## Testes
 
+O projeto usa ESLint com as regras recomendadas e verificacoes de estilo inspiradas no StandardJS, adaptadas ao uso existente de aspas duplas e ponto e virgula.
+
 ```powershell
 npm --prefix api run lint
 npm --prefix api test
 npm --prefix api run deps:check
 ```
+
+O GitHub Actions executa o ESLint em cada push e pull request.
 
 Para atualizar dependencias npm dentro da faixa suportada pelo Node do projeto:
 
