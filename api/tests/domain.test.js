@@ -33,7 +33,7 @@ test("gera sessoes sprint com treino reduzido, sprint quali e corrida sprint", (
 });
 
 test("calcula pontos de corrida e sprint sem pontuar treinos ou quali", () => {
-  assert.equal(pointsForResult('RACE', 1, "CLASSIFIED"), 25);
+  assert.equal(pointsForResult("RACE", 1, "CLASSIFIED"), 25);
   assert.equal(pointsForResult("RACE", 10, "CLASSIFIED"), 1);
   assert.equal(pointsForResult("SPRINT", 1, "CLASSIFIED"), 8);
   assert.equal(pointsForResult("SPRINT", 8, "CLASSIFIED"), 1);
