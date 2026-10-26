@@ -83,6 +83,7 @@ npm --prefix api run deps:check
 ```
 
 O ESLint e o jscpd verificam o codigo em cada push e pull request.
+O jscpd fica na versao 4.x porque a versao 5.x requer glibc 2.32 ou superior, ausente no container Debian 11 do projeto.
 
 Para atualizar dependencias npm dentro da faixa suportada pelo Node do projeto:
 

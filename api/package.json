@@ -9,7 +9,7 @@
     "test": "node --test tests/*.test.js",
     "lint": "eslint . ../frontend ../shared ../scripts",
     "duplicates": "jscpd --format javascript --min-lines 5 --min-tokens 50 --max-lines 2000 --threshold 0.1 --gitignore src tests ../frontend/server.js ../frontend/src ../shared ../scripts",
-    "deps:check": "ncu --enginesNode --errorLevel 2",
+    "deps:check": "ncu --enginesNode --errorLevel 2 --reject jscpd",
     "deps:update": "ncu --enginesNode -u && npm install"
   },
   "engines": {
