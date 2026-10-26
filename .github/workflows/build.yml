@@ -29,6 +29,10 @@ jobs:
       working-directory: api
       run: npm run lint
 
+    - name: Detectar codigo duplicado com jscpd
+      working-directory: api
+      run: npm run duplicates
+
     - name: Executar testes
       working-directory: api
       run: npm test

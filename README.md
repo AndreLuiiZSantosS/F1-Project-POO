@@ -77,11 +77,13 @@ O projeto usa ESLint com as regras recomendadas e verificacoes de estilo inspira
 
 ```powershell
 npm --prefix api run lint
+npm --prefix api run duplicates
 npm --prefix api test
 npm --prefix api run deps:check
 ```
 
-O GitHub Actions executa o ESLint em cada push e pull request.
+O ESLint e o jscpd verificam o codigo em cada push e pull request.
+O jscpd fica na versao 4.x porque a versao 5.x requer glibc 2.32 ou superior, ausente no container Debian 11 do projeto.
 
 Para atualizar dependencias npm dentro da faixa suportada pelo Node do projeto:
 
