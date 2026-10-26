@@ -25,7 +25,7 @@ jobs:
       working-directory: api
       run: npm run deps:check
 
-    - name: Detectar APIs Node.js depreciadas
+    - name: Verificar padrao JavaScript com ESLint
       working-directory: api
       run: npm run lint
 

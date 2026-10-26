@@ -15,8 +15,11 @@
     "node": ">=20.19"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@stylistic/eslint-plugin": "^5.10.0",
     "eslint": "^10.13.0",
     "eslint-plugin-n": "^18.5.0",
+    "globals": "^17.13.0",
     "npm-check-updates": "^23.1.1"
   }
 }

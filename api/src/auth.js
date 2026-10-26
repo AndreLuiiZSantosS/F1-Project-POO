@@ -2,11 +2,11 @@ const crypto = require("node:crypto");
 
 const TOKEN_TTL_MS = 1000 * 60 * 60 * 24 * 7;
 
-function nowIso() {
+function nowIso () {
   return new Date().toISOString();
 }
 
-function hashPassword(password, salt = crypto.randomBytes(16).toString("hex")) {
+function hashPassword (password, salt = crypto.randomBytes(16).toString("hex")) {
   return new Promise((resolve, reject) => {
     crypto.scrypt(String(password), salt, 64, (error, derivedKey) => {
       if (error) {
@@ -18,7 +18,7 @@ function hashPassword(password, salt = crypto.randomBytes(16).toString("hex")) {
   });
 }
 
-async function verifyPassword(password, storedHash) {
+async function verifyPassword (password, storedHash) {
   const [algorithm, salt, expected] = String(storedHash || "").split(":");
   if (algorithm !== "scrypt" || !salt || !expected) {
     return false;
@@ -30,7 +30,7 @@ async function verifyPassword(password, storedHash) {
   return computedHash.length === expectedHash.length && crypto.timingSafeEqual(computedHash, expectedHash);
 }
 
-function createToken(userId) {
+function createToken (userId) {
   return {
     token: crypto.randomBytes(32).toString("hex"),
     userId,
@@ -39,11 +39,11 @@ function createToken(userId) {
   };
 }
 
-function normalizeEmail(email) {
+function normalizeEmail (email) {
   return String(email || "").trim().toLowerCase();
 }
 
-function sanitizeUser(user) {
+function sanitizeUser (user) {
   if (!user) return null;
   return {
     id: user.id,
@@ -54,7 +54,7 @@ function sanitizeUser(user) {
   };
 }
 
-function userFromRequest(request, database) {
+function userFromRequest (request, database) {
   const authorization = request.headers.authorization || "";
   const match = authorization.match(/^Bearer\s+(.+)$/i);
   if (!match) return null;

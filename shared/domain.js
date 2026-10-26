@@ -1,4 +1,4 @@
-(function attachDomain(root) {
+(function attachDomain (root) {
   const RACE_POINTS = [25, 18, 15, 12, 10, 8, 6, 4, 2, 1];
   const SPRINT_POINTS = [8, 7, 6, 5, 4, 3, 2, 1];
 
@@ -10,16 +10,16 @@
     { value: "RETIRED", label: "Retirado" },
   ];
 
-  function toPositiveInt(value, fallback) {
+  function toPositiveInt (value, fallback) {
     const parsed = Number.parseInt(value, 10);
     return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
   }
 
-  function clampCount(value, fallback, max) {
+  function clampCount (value, fallback, max) {
     return Math.min(Math.max(toPositiveInt(value, fallback), 1), max);
   }
 
-  function sessionDefinitionsForEvent(event) {
+  function sessionDefinitionsForEvent (event) {
     const practiceCount = clampCount(event.practiceSessionsCount, 3, 3);
     const qualifyingCount = clampCount(event.qualifyingSessionsCount, 3, 3);
     const sessions = [];
@@ -72,7 +72,7 @@
     return sessions;
   }
 
-  function pointsForResult(sessionType, position, status) {
+  function pointsForResult (sessionType, position, status) {
     if (status && status !== "CLASSIFIED") {
       return 0;
     }
@@ -93,7 +93,7 @@
     return 0;
   }
 
-  function normalizeSessionType(value) {
+  function normalizeSessionType (value) {
     return String(value || "").trim().toUpperCase();
   }
 

@@ -18,7 +18,7 @@ const MIME_TYPES = {
   ".webp": "image/webp",
 };
 
-function resolveRequestPath(urlPath) {
+function resolveRequestPath (urlPath) {
   if (urlPath === "/shared/domain.js") {
     return path.join(ROOT_DIR, "shared", "domain.js");
   }
@@ -33,7 +33,7 @@ function resolveRequestPath(urlPath) {
   return target;
 }
 
-function sendFile(response, filePath) {
+function sendFile (response, filePath) {
   fs.readFile(filePath, (error, data) => {
     if (error) {
       fs.readFile(path.join(FRONTEND_DIR, "index.html"), (fallbackError, fallbackData) => {

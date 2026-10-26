@@ -7,11 +7,11 @@ const mediaBase = "https://media.formula1.com/image/upload";
 const teamLogoBase = `${mediaBase}/f_auto,c_limit,w_96,q_auto/f_auto/q_auto/fom-website/2026-redesign-assets/team%20logos`;
 const driverPhotoBase = `${mediaBase}/f_auto,c_limit,w_384,q_auto/f_auto/q_auto/fom-website/drivers/2026Drivers`;
 
-function teamLogo(slug) {
+function teamLogo (slug) {
   return `${teamLogoBase}/${encodeURIComponent(slug).replaceAll("%20", "%20")}`;
 }
 
-function driverPhoto(slug) {
+function driverPhoto (slug) {
   return `${driverPhotoBase}/${slug}`;
 }
 
@@ -225,7 +225,7 @@ const sprintResults = [
   [12, ["RUS", "LEC", "NOR", "ANT", "PIA", "VER", "HAM", "GAS"]],
 ];
 
-function buildResults() {
+function buildResults () {
   const driverByCode = new Map(drivers.map((driver) => [driver.code, driver]));
   const results = [];
   let id = 1;
@@ -271,7 +271,7 @@ function buildResults() {
   return results;
 }
 
-async function main() {
+async function main () {
   const admin = {
     id: 1,
     name: "Admin F1",

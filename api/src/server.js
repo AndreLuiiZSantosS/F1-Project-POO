@@ -26,13 +26,13 @@ const { mutateDatabase, nextId, readDatabase } = require("./store");
 const STATUS_VALUES = new Set(RESULT_STATUSES.map((status) => status.value));
 
 class HttpError extends Error {
-  constructor(status, message) {
+  constructor (status, message) {
     super(message);
     this.status = status;
   }
 }
 
-function corsHeaders() {
+function corsHeaders () {
   return {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
@@ -41,7 +41,7 @@ function corsHeaders() {
   };
 }
 
-function sendJson(response, status, payload) {
+function sendJson (response, status, payload) {
   response.writeHead(status, {
     "Content-Type": "application/json; charset=utf-8",
     ...corsHeaders(),
@@ -49,7 +49,7 @@ function sendJson(response, status, payload) {
   response.end(JSON.stringify(payload, null, 2));
 }
 
-function readJsonBody(request) {
+function readJsonBody (request) {
   return new Promise((resolve, reject) => {
     let body = "";
     request.on("data", (chunk) => {
@@ -75,7 +75,7 @@ function readJsonBody(request) {
   });
 }
 
-function cleanString(value, fallback = "") {
+function cleanString (value, fallback = "") {
   if (value === null || value === undefined) {
     return fallback;
   }
@@ -83,7 +83,7 @@ function cleanString(value, fallback = "") {
   return String(value).trim();
 }
 
-function cleanOptionalUrl(value) {
+function cleanOptionalUrl (value) {
   const url = cleanString(value);
   if (!url) {
     return "";
@@ -97,32 +97,32 @@ function cleanOptionalUrl(value) {
   }
 }
 
-function cleanColor(value, fallback = "#e10600") {
+function cleanColor (value, fallback = "#e10600") {
   const color = cleanString(value, fallback);
   return /^#[0-9a-f]{6}$/i.test(color) ? color.toUpperCase() : fallback;
 }
 
-function toPositiveInt(value, fallback = null) {
+function toPositiveInt (value, fallback = null) {
   const parsed = Number.parseInt(value, 10);
   return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
 }
 
-function toBool(value) {
+function toBool (value) {
   return value === true || value === "true" || value === "on" || value === 1 || value === "1";
 }
 
-function findById(items, id) {
+function findById (items, id) {
   const numericId = Number.parseInt(id, 10);
   return items.find((item) => Number(item.id) === numericId) || null;
 }
 
-function bearerToken(request) {
+function bearerToken (request) {
   const authorization = request.headers.authorization || "";
   const match = authorization.match(/^Bearer\s+(.+)$/i);
   return match ? match[1].trim() : "";
 }
 
-function requireUser(request, database) {
+function requireUser (request, database) {
   const user = userFromRequest(request, database);
   if (!user) {
     throw new HttpError(401, "Login necessario");
@@ -130,7 +130,7 @@ function requireUser(request, database) {
   return user;
 }
 
-function requireAdminUser(request, database) {
+function requireAdminUser (request, database) {
   const user = requireUser(request, database);
   if (user.role !== "admin") {
     throw new HttpError(403, "Acesso restrito ao admin");
@@ -138,7 +138,7 @@ function requireAdminUser(request, database) {
   return user;
 }
 
-function publicUser(user) {
+function publicUser (user) {
   return {
     id: user.id,
     name: user.name,
@@ -146,12 +146,12 @@ function publicUser(user) {
   };
 }
 
-function cleanExpiredTokens(database) {
+function cleanExpiredTokens (database) {
   const now = Date.now();
   database.authTokens = database.authTokens.filter((token) => Date.parse(token.expiresAt) >= now);
 }
 
-async function ensureDefaultAdmin(database) {
+async function ensureDefaultAdmin (database) {
   const email = normalizeEmail(DEFAULT_ADMIN_EMAIL);
   let user = database.users.find((item) => item.email === email);
 
@@ -175,7 +175,7 @@ async function ensureDefaultAdmin(database) {
   return user;
 }
 
-function sortByPosition(left, right) {
+function sortByPosition (left, right) {
   const leftPosition = Number(left.position || 999);
   const rightPosition = Number(right.position || 999);
   if (leftPosition !== rightPosition) {
@@ -185,7 +185,7 @@ function sortByPosition(left, right) {
   return String(left.time || "").localeCompare(String(right.time || ""));
 }
 
-function serializeTeam(team) {
+function serializeTeam (team) {
   return {
     id: team.id,
     name: team.name,
@@ -200,7 +200,7 @@ function serializeTeam(team) {
   };
 }
 
-function serializeDriver(driver, teams) {
+function serializeDriver (driver, teams) {
   const team = findById(teams, driver.teamId);
   return {
     id: driver.id,
@@ -215,7 +215,7 @@ function serializeDriver(driver, teams) {
   };
 }
 
-function serializeResult(result, database) {
+function serializeResult (result, database) {
   const driver = findById(database.drivers, result.driverId);
   return {
     id: result.id,
@@ -233,7 +233,7 @@ function serializeResult(result, database) {
   };
 }
 
-function serializeEventBrief(event) {
+function serializeEventBrief (event) {
   return {
     id: event.id,
     round: event.round,
@@ -243,7 +243,7 @@ function serializeEventBrief(event) {
   };
 }
 
-function serializeEvent(event, database) {
+function serializeEvent (event, database) {
   const definitions = sessionDefinitionsForEvent(event);
   const sessions = definitions.map((definition) => {
     const results = database.results
@@ -273,7 +273,7 @@ function serializeEvent(event, database) {
   };
 }
 
-function serializeDatabase(database) {
+function serializeDatabase (database) {
   return {
     meta: {
       version: database.meta.version,
@@ -290,7 +290,7 @@ function serializeDatabase(database) {
   };
 }
 
-function buildStandings(database) {
+function buildStandings (database) {
   const driverRows = database.drivers.map((driver) => ({
     driver: serializeDriver(driver, database.teams),
     points: 0,
@@ -363,11 +363,11 @@ function buildStandings(database) {
   };
 }
 
-function scorePrediction(prediction, database) {
+function scorePrediction (prediction, database) {
   const actualResults = database.results.filter(
     (result) =>
       Number(result.eventId) === Number(prediction.eventId) &&
-      result.sessionType === prediction.sessionType
+      result.sessionType === prediction.sessionType,
   );
 
   if (!actualResults.length) {
@@ -387,7 +387,7 @@ function scorePrediction(prediction, database) {
   return { points, correctPicks, evaluated: true, possiblePicks: prediction.picks.length };
 }
 
-function serializePrediction(prediction, database) {
+function serializePrediction (prediction, database) {
   const event = findById(database.events, prediction.eventId);
   const session = event
     ? sessionDefinitionsForEvent(event).find((definition) => definition.type === prediction.sessionType)
@@ -414,7 +414,7 @@ function serializePrediction(prediction, database) {
   };
 }
 
-function buildPredictionLeaderboard(database) {
+function buildPredictionLeaderboard (database) {
   const rowsByUserId = new Map();
 
   for (const prediction of database.predictions) {
@@ -456,7 +456,7 @@ function buildPredictionLeaderboard(database) {
   });
 }
 
-function normalizeTeamPayload(payload, existing = {}) {
+function normalizeTeamPayload (payload, existing = {}) {
   const name = cleanString(payload.name, existing.name);
   if (!name) {
     throw new HttpError(400, "Nome da equipe e obrigatorio");
@@ -476,7 +476,7 @@ function normalizeTeamPayload(payload, existing = {}) {
   };
 }
 
-function normalizeDriverPayload(payload, database, existing = {}) {
+function normalizeDriverPayload (payload, database, existing = {}) {
   const name = cleanString(payload.name, existing.name);
   const number = toPositiveInt(payload.number, existing.number);
   const teamId = toPositiveInt(payload.teamId, existing.teamId);
@@ -503,7 +503,7 @@ function normalizeDriverPayload(payload, database, existing = {}) {
   };
 }
 
-function normalizeEventPayload(payload, existing = {}) {
+function normalizeEventPayload (payload, existing = {}) {
   const round = toPositiveInt(payload.round, existing.round);
   const name = cleanString(payload.name, existing.name);
 
@@ -529,7 +529,7 @@ function normalizeEventPayload(payload, existing = {}) {
   };
 }
 
-function normalizeResultPayload(payload, database, existing = {}) {
+function normalizeResultPayload (payload, database, existing = {}) {
   const eventId = toPositiveInt(payload.eventId, existing.eventId);
   const driverId = toPositiveInt(payload.driverId, existing.driverId);
   const event = findById(database.events, eventId);
@@ -570,7 +570,7 @@ function normalizeResultPayload(payload, database, existing = {}) {
   };
 }
 
-function normalizePredictionPayload(payload, database) {
+function normalizePredictionPayload (payload, database) {
   const eventId = toPositiveInt(payload.eventId);
   const event = findById(database.events, eventId);
   const sessionType = cleanString(payload.sessionType, "RACE").toUpperCase();
@@ -585,7 +585,7 @@ function normalizePredictionPayload(payload, database) {
   }
 
   const actualResults = database.results.filter(
-    (result) => Number(result.eventId) === Number(eventId) && result.sessionType === sessionType
+    (result) => Number(result.eventId) === Number(eventId) && result.sessionType === sessionType,
   );
   if (actualResults.length) {
     throw new HttpError(409, "Previsoes bloqueadas para sessao ja finalizada");
@@ -624,7 +624,7 @@ function normalizePredictionPayload(payload, database) {
   return { eventId, sessionType, picks: normalizedPicks };
 }
 
-function parseRoute(pathname) {
+function parseRoute (pathname) {
   const parts = pathname.split("/").filter(Boolean);
   if (parts[0] !== "api") {
     return null;
@@ -638,7 +638,7 @@ function parseRoute(pathname) {
   };
 }
 
-async function handleAuthGet(request, route, response) {
+async function handleAuthGet (request, route, response) {
   if (route.id !== "me") {
     sendJson(response, 404, { error: "Endpoint nao encontrado" });
     return;
@@ -649,7 +649,7 @@ async function handleAuthGet(request, route, response) {
   sendJson(response, 200, { user: sanitizeUser(user) });
 }
 
-async function handleAuthWrite(request, route, response) {
+async function handleAuthWrite (request, route, response) {
   const payload = await readJsonBody(request);
 
   if (request.method === "POST" && route.id === "register") {
@@ -730,7 +730,7 @@ async function handleAuthWrite(request, route, response) {
   sendJson(response, 404, { error: "Endpoint nao encontrado" });
 }
 
-async function handlePredictionGet(request, route, response) {
+async function handlePredictionGet (request, route, response) {
   const database = await readDatabase();
 
   if (route.id === "leaderboard") {
@@ -751,7 +751,7 @@ async function handlePredictionGet(request, route, response) {
   sendJson(response, 404, { error: "Endpoint nao encontrado" });
 }
 
-async function handlePredictionWrite(request, route, response) {
+async function handlePredictionWrite (request, route, response) {
   const payload = await readJsonBody(request);
 
   if (request.method === "POST" && route.resource === "predictions" && !route.id) {
@@ -764,7 +764,7 @@ async function handlePredictionWrite(request, route, response) {
         (item) =>
           Number(item.userId) === Number(user.id) &&
           Number(item.eventId) === Number(normalized.eventId) &&
-          item.sessionType === normalized.sessionType
+          item.sessionType === normalized.sessionType,
       );
 
       if (existing) {
@@ -813,7 +813,7 @@ async function handlePredictionWrite(request, route, response) {
   sendJson(response, 404, { error: "Endpoint nao encontrado" });
 }
 
-async function handlePublicGet(request, route, response) {
+async function handlePublicGet (request, route, response) {
   if (route.resource === "auth") {
     await handleAuthGet(request, route, response);
     return;
@@ -877,7 +877,7 @@ async function handlePublicGet(request, route, response) {
   sendJson(response, 404, { error: "Endpoint nao encontrado" });
 }
 
-async function handleAdminWrite(request, route, response) {
+async function handleAdminWrite (request, route, response) {
   const databaseForAuth = await readDatabase();
   requireAdminUser(request, databaseForAuth);
   const payload = await readJsonBody(request);
@@ -886,7 +886,7 @@ async function handleAdminWrite(request, route, response) {
     const team = await mutateDatabase((database) => {
       const normalized = normalizeTeamPayload(payload);
       const duplicated = database.teams.some(
-        (item) => item.name.toLowerCase() === normalized.name.toLowerCase()
+        (item) => item.name.toLowerCase() === normalized.name.toLowerCase(),
       );
       if (duplicated) {
         throw new HttpError(409, "Equipe ja cadastrada");
@@ -937,7 +937,7 @@ async function handleAdminWrite(request, route, response) {
       }
       const normalized = normalizeDriverPayload(payload, database, existing);
       const duplicatedNumber = database.drivers.some(
-        (item) => Number(item.id) !== Number(existing.id) && Number(item.number) === Number(normalized.number)
+        (item) => Number(item.id) !== Number(existing.id) && Number(item.number) === Number(normalized.number),
       );
       if (duplicatedNumber) {
         throw new HttpError(409, "Numero de piloto ja cadastrado");
@@ -973,7 +973,7 @@ async function handleAdminWrite(request, route, response) {
       }
       const normalized = normalizeEventPayload(payload, existing);
       const duplicatedRound = database.events.some(
-        (item) => Number(item.id) !== Number(existing.id) && Number(item.round) === Number(normalized.round)
+        (item) => Number(item.id) !== Number(existing.id) && Number(item.round) === Number(normalized.round),
       );
       if (duplicatedRound) {
         throw new HttpError(409, "Numero da etapa ja cadastrado");
@@ -992,7 +992,7 @@ async function handleAdminWrite(request, route, response) {
         (item) =>
           Number(item.eventId) === Number(normalized.eventId) &&
           item.sessionType === normalized.sessionType &&
-          Number(item.driverId) === Number(normalized.driverId)
+          Number(item.driverId) === Number(normalized.driverId),
       );
 
       if (existing) {
@@ -1025,7 +1025,7 @@ async function handleAdminWrite(request, route, response) {
   sendJson(response, 404, { error: "Endpoint nao encontrado" });
 }
 
-async function handleWrite(request, route, response) {
+async function handleWrite (request, route, response) {
   if (route.resource === "auth") {
     await handleAuthWrite(request, route, response);
     return;
@@ -1039,7 +1039,7 @@ async function handleWrite(request, route, response) {
   await handleAdminWrite(request, route, response);
 }
 
-async function requestHandler(request, response) {
+async function requestHandler (request, response) {
   const { pathname } = new URL(request.url, `http://${request.headers.host || "localhost"}`);
   const route = parseRoute(pathname);
 
