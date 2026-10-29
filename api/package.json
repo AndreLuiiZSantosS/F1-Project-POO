@@ -21,7 +21,7 @@
     "eslint": "^10.13.0",
     "eslint-plugin-n": "^18.5.0",
     "globals": "^17.13.0",
-    "jscpd": "^4.0.5",
+    "jscpd": "^5.4.2",
     "npm-check-updates": "^23.1.1"
   }
 }
