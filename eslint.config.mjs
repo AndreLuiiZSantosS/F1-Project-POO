@@ -5,6 +5,7 @@ const js = require("@eslint/js");
 const stylistic = require("@stylistic/eslint-plugin");
 const globals = require("globals");
 const nodePlugin = require("eslint-plugin-n");
+const sonarjs = require("eslint-plugin-sonarjs");
 
 export default [
   js.configs.recommended,
@@ -19,6 +20,7 @@ export default [
     plugins: {
       n: nodePlugin,
       "@stylistic": stylistic,
+      sonarjs,
     },
     settings: {
       node: {
@@ -27,6 +29,10 @@ export default [
     },
     rules: {
       "n/no-deprecated-api": "error",
+      "sonarjs/cognitive-complexity": ["error", 15],
+      "sonarjs/no-collapsible-if": "error",
+      "sonarjs/no-duplicate-string": ["error", { threshold: 4 }],
+      "sonarjs/no-nested-conditional": "error",
       "@stylistic/arrow-spacing": "error",
       "@stylistic/comma-dangle": ["error", "always-multiline"],
       "@stylistic/comma-spacing": "error",

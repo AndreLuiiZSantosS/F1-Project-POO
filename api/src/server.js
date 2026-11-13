@@ -24,6 +24,7 @@ const {
 const { mutateDatabase, nextId, readDatabase } = require("./store");
 
 const STATUS_VALUES = new Set(RESULT_STATUSES.map((status) => status.value));
+const ENDPOINT_NOT_FOUND = "Endpoint nao encontrado";
 
 class HttpError extends Error {
   constructor (status, message) {
@@ -185,6 +186,54 @@ function sortByPosition (left, right) {
   return String(left.time || "").localeCompare(String(right.time || ""));
 }
 
+function addResultToDriverStanding (row, result) {
+  row.points += result.points;
+  if (result.sessionType === "SPRINT") {
+    row.sprintPoints += result.points;
+  }
+  if (result.sessionType !== "RACE") {
+    return;
+  }
+
+  row.racePoints += result.points;
+  if (Number(result.position) === 1) {
+    row.wins += 1;
+  }
+  if (Number(result.position) >= 1 && Number(result.position) <= 3) {
+    row.podiums += 1;
+  }
+}
+
+function buildTeamStandings (driverRows) {
+  const teamRowsById = new Map();
+  for (const row of driverRows) {
+    if (!row.driver.team) {
+      continue;
+    }
+
+    const teamId = Number(row.driver.team.id);
+    if (!teamRowsById.has(teamId)) {
+      teamRowsById.set(teamId, {
+        team: row.driver.team,
+        points: 0,
+        wins: 0,
+        podiums: 0,
+      });
+    }
+
+    const teamRow = teamRowsById.get(teamId);
+    teamRow.points += row.points;
+    teamRow.wins += row.wins;
+    teamRow.podiums += row.podiums;
+  }
+
+  return Array.from(teamRowsById.values()).sort((left, right) => {
+    if (right.points !== left.points) return right.points - left.points;
+    if (right.wins !== left.wins) return right.wins - left.wins;
+    return left.team.name.localeCompare(right.team.name);
+  });
+}
+
 function serializeTeam (team) {
   return {
     id: team.id,
@@ -308,19 +357,7 @@ function buildStandings (database) {
       continue;
     }
 
-    row.points += result.points;
-    if (result.sessionType === "SPRINT") {
-      row.sprintPoints += result.points;
-    }
-    if (result.sessionType === "RACE") {
-      row.racePoints += result.points;
-      if (Number(result.position) === 1) {
-        row.wins += 1;
-      }
-      if (Number(result.position) >= 1 && Number(result.position) <= 3) {
-        row.podiums += 1;
-      }
-    }
+    addResultToDriverStanding(row, result);
   }
 
   driverRows.sort((left, right) => {
@@ -329,37 +366,9 @@ function buildStandings (database) {
     return left.driver.name.localeCompare(right.driver.name);
   });
 
-  const teamRowsById = new Map();
-  for (const row of driverRows) {
-    if (!row.driver.team) {
-      continue;
-    }
-
-    const teamId = Number(row.driver.team.id);
-    if (!teamRowsById.has(teamId)) {
-      teamRowsById.set(teamId, {
-        team: row.driver.team,
-        points: 0,
-        wins: 0,
-        podiums: 0,
-      });
-    }
-
-    const teamRow = teamRowsById.get(teamId);
-    teamRow.points += row.points;
-    teamRow.wins += row.wins;
-    teamRow.podiums += row.podiums;
-  }
-
-  const teamRows = Array.from(teamRowsById.values()).sort((left, right) => {
-    if (right.points !== left.points) return right.points - left.points;
-    if (right.wins !== left.wins) return right.wins - left.wins;
-    return left.team.name.localeCompare(right.team.name);
-  });
-
   return {
     drivers: driverRows,
-    teams: teamRows,
+    teams: buildTeamStandings(driverRows),
   };
 }
 
@@ -640,7 +649,7 @@ function parseRoute (pathname) {
 
 async function handleAuthGet (request, route, response) {
   if (route.id !== "me") {
-    sendJson(response, 404, { error: "Endpoint nao encontrado" });
+    sendJson(response, 404, { error: ENDPOINT_NOT_FOUND });
     return;
   }
 
@@ -727,7 +736,7 @@ async function handleAuthWrite (request, route, response) {
     return;
   }
 
-  sendJson(response, 404, { error: "Endpoint nao encontrado" });
+  sendJson(response, 404, { error: ENDPOINT_NOT_FOUND });
 }
 
 async function handlePredictionGet (request, route, response) {
@@ -748,7 +757,7 @@ async function handlePredictionGet (request, route, response) {
     return;
   }
 
-  sendJson(response, 404, { error: "Endpoint nao encontrado" });
+  sendJson(response, 404, { error: ENDPOINT_NOT_FOUND });
 }
 
 async function handlePredictionWrite (request, route, response) {
@@ -810,7 +819,7 @@ async function handlePredictionWrite (request, route, response) {
     return;
   }
 
-  sendJson(response, 404, { error: "Endpoint nao encontrado" });
+  sendJson(response, 404, { error: ENDPOINT_NOT_FOUND });
 }
 
 async function handlePublicGet (request, route, response) {
@@ -874,7 +883,11 @@ async function handlePublicGet (request, route, response) {
     return;
   }
 
-  sendJson(response, 404, { error: "Endpoint nao encontrado" });
+  sendJson(response, 404, { error: ENDPOINT_NOT_FOUND });
+}
+
+function isAdminResourceRequest (request, route, method, resource) {
+  return request.method === method && route.resource === resource;
 }
 
 async function handleAdminWrite (request, route, response) {
@@ -882,7 +895,7 @@ async function handleAdminWrite (request, route, response) {
   requireAdminUser(request, databaseForAuth);
   const payload = await readJsonBody(request);
 
-  if (request.method === "POST" && route.resource === "teams") {
+  if (isAdminResourceRequest(request, route, "POST", "teams")) {
     const team = await mutateDatabase((database) => {
       const normalized = normalizeTeamPayload(payload);
       const duplicated = database.teams.some(
@@ -900,7 +913,7 @@ async function handleAdminWrite (request, route, response) {
     return;
   }
 
-  if (request.method === "PUT" && route.resource === "teams") {
+  if (isAdminResourceRequest(request, route, "PUT", "teams")) {
     const team = await mutateDatabase((database) => {
       const existing = findById(database.teams, route.id);
       if (!existing) {
@@ -913,7 +926,7 @@ async function handleAdminWrite (request, route, response) {
     return;
   }
 
-  if (request.method === "POST" && route.resource === "drivers") {
+  if (isAdminResourceRequest(request, route, "POST", "drivers")) {
     const driver = await mutateDatabase((database) => {
       const normalized = normalizeDriverPayload(payload, database);
       const duplicatedNumber = database.drivers.some((item) => Number(item.number) === Number(normalized.number));
@@ -929,7 +942,7 @@ async function handleAdminWrite (request, route, response) {
     return;
   }
 
-  if (request.method === "PUT" && route.resource === "drivers") {
+  if (isAdminResourceRequest(request, route, "PUT", "drivers")) {
     const driver = await mutateDatabase((database) => {
       const existing = findById(database.drivers, route.id);
       if (!existing) {
@@ -949,7 +962,7 @@ async function handleAdminWrite (request, route, response) {
     return;
   }
 
-  if (request.method === "POST" && route.resource === "events") {
+  if (isAdminResourceRequest(request, route, "POST", "events")) {
     const event = await mutateDatabase((database) => {
       const normalized = normalizeEventPayload(payload);
       const duplicatedRound = database.events.some((item) => Number(item.round) === Number(normalized.round));
@@ -965,7 +978,7 @@ async function handleAdminWrite (request, route, response) {
     return;
   }
 
-  if (request.method === "PUT" && route.resource === "events") {
+  if (isAdminResourceRequest(request, route, "PUT", "events")) {
     const event = await mutateDatabase((database) => {
       const existing = findById(database.events, route.id);
       if (!existing) {
@@ -985,7 +998,7 @@ async function handleAdminWrite (request, route, response) {
     return;
   }
 
-  if (request.method === "POST" && route.resource === "results") {
+  if (isAdminResourceRequest(request, route, "POST", "results")) {
     const result = await mutateDatabase((database) => {
       const normalized = normalizeResultPayload(payload, database);
       const existing = database.results.find(
@@ -1008,7 +1021,7 @@ async function handleAdminWrite (request, route, response) {
     return;
   }
 
-  if (request.method === "DELETE" && route.resource === "results") {
+  if (isAdminResourceRequest(request, route, "DELETE", "results")) {
     const deleted = await mutateDatabase((database) => {
       const index = database.results.findIndex((item) => Number(item.id) === Number(route.id));
       if (index < 0) {
@@ -1022,7 +1035,7 @@ async function handleAdminWrite (request, route, response) {
     return;
   }
 
-  sendJson(response, 404, { error: "Endpoint nao encontrado" });
+  sendJson(response, 404, { error: ENDPOINT_NOT_FOUND });
 }
 
 async function handleWrite (request, route, response) {
