@@ -1,0 +1,94 @@
+classDiagram
+  direction LR
+
+  class Team {
+    +number id
+    +string name
+    +string shortName
+    +string fullName
+    +string base
+    +string country
+    +string powerUnit
+    +string chief
+    +string color
+    +string emblemUrl
+  }
+
+  class Driver {
+    +number id
+    +string name
+    +string code
+    +number number
+    +string country
+    +boolean active
+    +string photoUrl
+    +number teamId
+  }
+
+  class Event {
+    +number id
+    +number round
+    +string name
+    +string circuit
+    +string city
+    +string country
+    +string date
+    +boolean hasSprint
+    +number practiceSessionsCount
+    +number qualifyingSessionsCount
+    +string notes
+  }
+
+  class Session {
+    +string type
+    +string label
+    +string shortLabel
+    +string group
+    +boolean pointsSession
+  }
+
+  class Result {
+    +number id
+    +number eventId
+    +string sessionType
+    +number driverId
+    +number position
+    +string time
+    +string gap
+    +number points
+    +string status
+    +string notes
+  }
+
+  class User {
+    +number id
+    +string name
+    +string email
+    +string role
+    +string createdAt
+  }
+
+  class Prediction {
+    +number id
+    +number userId
+    +number eventId
+    +string sessionType
+    +array picks
+    +string createdAt
+    +string updatedAt
+  }
+
+  class PredictionPick {
+    +number position
+    +number driverId
+  }
+
+  Team "1" <-- "0..*" Driver : teamId
+  Event "1" *-- "1..*" Session : defines
+  Event "1" <-- "0..*" Result : eventId
+  Session "1" <-- "0..*" Result : sessionType
+  Driver "1" <-- "0..*" Result : driverId
+  User "1" <-- "0..*" Prediction : userId
+  Event "1" <-- "0..*" Prediction : eventId
+  Prediction "1" *-- "1..*" PredictionPick : picks
+  Driver "1" <-- "0..*" PredictionPick : driverId

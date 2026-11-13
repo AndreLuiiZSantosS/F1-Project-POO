@@ -85,6 +85,16 @@ npm --prefix api run deps:check
 O ESLint e o jscpd verificam o codigo em cada push e pull request.
 O jscpd fica na versao 4.x porque a versao 5.x requer glibc 2.32 ou superior, ausente no container Debian 11 do projeto.
 
+## Diagrama UML de classes
+
+O diagrama das entidades de dominio da API esta em [`docs/diagrams/domain-classes.mmd`](docs/diagrams/domain-classes.mmd), e a imagem gerada fica em [`docs/diagrams/domain-classes.svg`](docs/diagrams/domain-classes.svg). Para atualizar a imagem pela linha de comando:
+
+```powershell
+npm --prefix api run diagram
+```
+
+O pipeline tambem executa esse comando a cada push e pull request.
+
 Para atualizar dependencias npm dentro da faixa suportada pelo Node do projeto:
 
 ```powershell

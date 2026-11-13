@@ -21,6 +21,10 @@ jobs:
       working-directory: api
       run: npm ci
 
+    - name: Gerar diagrama UML de classes
+      working-directory: api
+      run: npm run diagram
+
     - name: Verificar atualizacoes de dependencias
       working-directory: api
       run: npm run deps:check
