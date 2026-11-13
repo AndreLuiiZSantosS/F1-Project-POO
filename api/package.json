@@ -8,6 +8,7 @@
     "start": "node src/server.js",
     "test": "node --test tests/*.test.js",
     "lint": "eslint . ../frontend ../shared ../scripts",
+    "code-smells": "eslint src ../frontend/src ../shared ../scripts",
     "duplicates": "jscpd --format javascript --min-lines 5 --min-tokens 50 --max-lines 2000 --threshold 0.1 --gitignore src tests ../frontend/server.js ../frontend/src ../shared ../scripts",
     "diagram": "mmdc -p mermaid-puppeteer.json -i ../docs/diagrams/domain-classes.mmd -o ../docs/diagrams/domain-classes.svg -b transparent",
     "deps:check": "ncu --enginesNode --errorLevel 2 --reject jscpd",
@@ -22,6 +23,7 @@
     "@stylistic/eslint-plugin": "^5.10.0",
     "eslint": "^10.14.0",
     "eslint-plugin-n": "^18.5.0",
+    "eslint-plugin-sonarjs": "^4.2.2",
     "globals": "^17.14.0",
     "jscpd": "^4.0.5",
     "npm-check-updates": "^23.1.1"

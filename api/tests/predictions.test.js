@@ -3,6 +3,7 @@ const test = require("node:test");
 
 const {
   buildPredictionLeaderboard,
+  buildStandings,
   scorePrediction,
 } = require("../src/server");
 
@@ -57,4 +58,33 @@ test("ranking soma pontuacao das previsoes avaliadas", () => {
   assert.equal(row.points, 25);
   assert.equal(row.correctPicks, 1);
   assert.equal(row.evaluatedCount, 1);
+});
+
+test("classificacao acumula pontos de corrida, sprint e equipe", () => {
+  const standings = buildStandings({
+    ...database,
+    results: [
+      ...database.results,
+      { id: 3, eventId: 1, sessionType: "SPRINT", driverId: 2, position: 1, status: "CLASSIFIED", points: 8 },
+    ],
+  });
+
+  assert.deepEqual(
+    standings.drivers.map((row) => [
+      row.driver.name,
+      row.points,
+      row.wins,
+      row.podiums,
+      row.sprintPoints,
+      row.racePoints,
+    ]),
+    [
+      ["Oscar Piastri", 26, 0, 1, 8, 18],
+      ["Lando Norris", 25, 1, 1, 0, 25],
+    ],
+  );
+  assert.deepEqual(
+    standings.teams.map((row) => [row.team.name, row.points, row.wins, row.podiums]),
+    [["McLaren", 51, 1, 2]],
+  );
 });

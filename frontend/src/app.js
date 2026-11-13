@@ -1,6 +1,17 @@
 const API_BASE = localStorage.getItem("f1-api-base") || "http://127.0.0.1:8000/api";
 const domain = window.F1Domain;
 
+const PAGE_PATHS = {
+  adminResults: "/admin/resultados",
+  myPredictions: "/minhas-previsoes",
+  predictions: "/previsoes",
+};
+
+const PAGE_LABELS = {
+  createPrediction: "Criar previsao",
+  myPredictions: "Minhas previsoes",
+};
+
 const SESSION_SLUGS = {
   FP1: "tl1",
   FP2: "tl2",
@@ -44,7 +55,7 @@ const routes = [
   { pattern: /^\/login\/?$/, name: "Login", render: renderLogin },
   { pattern: /^\/registro\/?$/, name: "Registro", render: renderRegister },
   { pattern: /^\/previsoes\/?$/, name: "Previsoes", render: renderPredictions },
-  { pattern: /^\/minhas-previsoes\/?$/, name: "Minhas previsoes", render: renderMyPredictions },
+  { pattern: /^\/minhas-previsoes\/?$/, name: PAGE_LABELS.myPredictions, render: renderMyPredictions },
   { pattern: /^\/ranking-usuarios\/?$/, name: "Ranking de usuarios", render: renderUserLeaderboard },
   { pattern: /^\/resultados\/?$/, name: "Resultados", render: renderResults },
   { pattern: /^\/etapas\/?$/, name: "Etapas", render: renderEvents },
@@ -69,8 +80,8 @@ const declaredPages = [
   ["/", "Dashboard"],
   ["/login", "Login e conta"],
   ["/registro", "Registro de usuario"],
-  ["/previsoes", "Criar previsoes"],
-  ["/minhas-previsoes", "Minhas previsoes"],
+  [PAGE_PATHS.predictions, "Criar previsoes"],
+  [PAGE_PATHS.myPredictions, PAGE_LABELS.myPredictions],
   ["/ranking-usuarios", "Ranking dos usuarios"],
   ["/resultados", "Resultados gerais"],
   ["/etapas", "Lista de etapas"],
@@ -95,7 +106,7 @@ const declaredPages = [
   ["/admin/equipes", "Cadastro de equipes"],
   ["/admin/pilotos", "Cadastro de pilotos"],
   ["/admin/etapas", "Cadastro de etapas"],
-  ["/admin/resultados", "Cadastro de resultados"],
+  [PAGE_PATHS.adminResults, "Cadastro de resultados"],
   ["/mapa", "Mapa do app"],
 ];
 
@@ -458,7 +469,7 @@ function renderDashboard () {
       <article class="route-card feature-card">
         <h3>Previsoes</h3>
         <p>Monte seu top 10 para corridas futuras e pontue quando acertar a posicao final.</p>
-        ${actionLink("/previsoes", "Criar previsao", "primary")}
+        ${actionLink(PAGE_PATHS.predictions, PAGE_LABELS.createPrediction, "primary")}
       </article>
       <article class="route-card feature-card">
         <h3>Ranking</h3>
@@ -491,7 +502,7 @@ function renderLogin () {
 
   if (state.currentUser) {
     return `
-      ${sectionHead("Conta", state.currentUser.name, isAdmin() ? actionLink("/admin", "Abrir admin", "primary") : actionLink("/previsoes", "Criar previsao", "primary"))}
+      ${sectionHead("Conta", state.currentUser.name, isAdmin() ? actionLink("/admin", "Abrir admin", "primary") : actionLink(PAGE_PATHS.predictions, PAGE_LABELS.createPrediction, "primary"))}
       <div class="auth-grid">
         <article class="auth-panel">
           <span class="eyebrow">${escapeHtml(state.currentUser.role === "admin" ? "Admin" : "Usuario")}</span>
@@ -502,9 +513,9 @@ function renderLogin () {
         <article class="auth-panel dark-panel">
           <span class="eyebrow">Atalhos</span>
           <div class="button-row">
-            ${actionLink("/minhas-previsoes", "Minhas previsoes", "primary")}
+            ${actionLink(PAGE_PATHS.myPredictions, PAGE_LABELS.myPredictions, "primary")}
             ${actionLink("/ranking-usuarios", "Ranking")}
-            ${isAdmin() ? actionLink("/admin/resultados", "Resultados admin") : ""}
+            ${isAdmin() ? actionLink(PAGE_PATHS.adminResults, "Resultados admin") : ""}
           </div>
         </article>
       </div>
@@ -551,7 +562,7 @@ function renderRegister () {
 
 function renderResults () {
   setHero("Resultados", "Todas as etapas", "Cada sessao tem sua propria pagina");
-  const aside = isAdmin() ? actionLink("/admin/resultados", "Adicionar resultado", "primary") : actionLink("/previsoes", "Criar previsao", "primary");
+  const aside = isAdmin() ? actionLink(PAGE_PATHS.adminResults, "Adicionar resultado", "primary") : actionLink(PAGE_PATHS.predictions, PAGE_LABELS.createPrediction, "primary");
   if (!state.events.length) return `${sectionHead("Etapas", "Resultados")}${emptyState("Sem etapas", "Cadastre etapas no painel admin.")}`;
   return `
     ${sectionHead("Etapas", "Resultados gerais", aside)}
@@ -773,7 +784,7 @@ function renderPredictions () {
     .join("");
 
   return `
-    ${sectionHead("Previsoes", "Enviar palpite", actionLink("/minhas-previsoes", "Minhas previsoes"))}
+    ${sectionHead("Previsoes", "Enviar palpite", actionLink(PAGE_PATHS.myPredictions, PAGE_LABELS.myPredictions))}
     <div class="prediction-layout">
       <form class="admin-panel prediction-panel" id="prediction-form">
         <div class="form-grid">
@@ -830,13 +841,13 @@ function predictionCard (prediction) {
 }
 
 function renderMyPredictions () {
-  setHero("Previsoes", "Minhas previsoes", "Historico e pontuacao calculada pelo backend");
+  setHero("Previsoes", PAGE_LABELS.myPredictions, "Historico e pontuacao calculada pelo backend");
   if (!state.currentUser) {
     return emptyState("Entre para ver suas previsoes", "Suas previsoes ficam vinculadas a conta.", actionLink("/login", "Entrar", "primary"));
   }
 
   return `
-    ${sectionHead("Conta", "Minhas previsoes", actionLink("/previsoes", "Nova previsao", "primary"))}
+    ${sectionHead("Conta", PAGE_LABELS.myPredictions, actionLink(PAGE_PATHS.predictions, "Nova previsao", "primary"))}
     <div class="route-grid">${state.myPredictions.map(predictionCard).join("") || emptyState("Sem previsoes", "Crie sua primeira previsao para uma corrida futura.")}</div>
   `;
 }
@@ -859,7 +870,7 @@ function renderUserLeaderboard () {
     : '<tr><td colspan="5" class="empty-row">Ainda nao ha previsoes pontuadas.</td></tr>';
 
   return `
-    ${sectionHead("Ranking", "Liga de usuarios", actionLink("/previsoes", "Criar previsao", "primary"))}
+    ${sectionHead("Ranking", "Liga de usuarios", actionLink(PAGE_PATHS.predictions, PAGE_LABELS.createPrediction, "primary"))}
     <div class="table-panel">
       <h3>Classificacao das previsoes</h3>
       <div class="table-scroll">
@@ -888,7 +899,7 @@ function adminNav () {
       ${actionLink("/admin/equipes", "Cadastrar equipes", "primary")}
       ${actionLink("/admin/pilotos", "Cadastrar pilotos", "primary")}
       ${actionLink("/admin/etapas", "Cadastrar etapas", "primary")}
-      ${actionLink("/admin/resultados", "Cadastrar resultados", "primary")}
+      ${actionLink(PAGE_PATHS.adminResults, "Cadastrar resultados", "primary")}
     </div>
   `;
 }
@@ -1002,6 +1013,20 @@ function renderAdminResults () {
   `;
 }
 
+function sitemapHref (path, firstEvent, firstDriver, firstTeam) {
+  const href = path.replace(":id", firstEvent?.id || firstDriver?.id || firstTeam?.id || "1");
+  if (path.startsWith("/pilotos/:id")) {
+    return `/pilotos/${firstDriver?.id || 1}`;
+  }
+  if (path.startsWith("/equipes/:id")) {
+    return `/equipes/${firstTeam?.id || 1}`;
+  }
+  if (path.startsWith("/etapas/:id")) {
+    return path.replace(":id", firstEvent?.id || 1);
+  }
+  return href;
+}
+
 function renderSitemap () {
   setHero("Mapa", `${declaredPages.length} paginas/rotas`, "Estrutura navegavel por area");
   const firstEvent = state.events[0];
@@ -1011,12 +1036,7 @@ function renderSitemap () {
     ${sectionHead("Rotas", "Mapa navegavel")}
     <div class="route-grid">
       ${declaredPages.map(([path, label]) => {
-        const href = path
-          .replace(":id", firstEvent?.id || firstDriver?.id || firstTeam?.id || "1");
-        const resolvedHref = path.startsWith("/pilotos/:id") ? `/pilotos/${firstDriver?.id || 1}`
-          : path.startsWith("/equipes/:id") ? `/equipes/${firstTeam?.id || 1}`
-            : path.startsWith("/etapas/:id") ? path.replace(":id", firstEvent?.id || 1)
-              : href;
+        const resolvedHref = sitemapHref(path, firstEvent, firstDriver, firstTeam);
         const adminTag = path.startsWith("/admin") ? "<span class=\"admin-route-tag\">Admin</span>" : "";
         return `<article class="route-card"><code>${escapeHtml(path)}</code><h3>${escapeHtml(label)}</h3>${adminTag}${actionLink(resolvedHref, "Abrir")}</article>`;
       }).join("")}
@@ -1092,7 +1112,7 @@ function bindAuthEvents () {
       setToken(result.token);
       state.currentUser = result.user;
       await loadData(false);
-      navigate("/previsoes");
+      navigate(PAGE_PATHS.predictions);
     } catch (error) {
       setStatus("#auth-status", error.message, "error");
     }
