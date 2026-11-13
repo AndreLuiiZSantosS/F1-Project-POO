@@ -89,7 +89,7 @@ O comando `code-smells` usa regras SonarJS para detectar complexidade cognitiva,
 
 ## Diagrama UML de classes
 
-O diagrama das entidades de dominio da API esta em [`docs/diagrams/domain-classes.mmd`](docs/diagrams/domain-classes.mmd), e a imagem gerada fica em [`docs/diagrams/domain-classes.svg`](docs/diagrams/domain-classes.svg). Para atualizar a imagem pela linha de comando:
+O diagrama das entidades de dominio da API esta em [`docs/diagrams/domain-classes.mmd`](docs/diagrams/domain-classes.mmd). A imagem e gerada no pipeline e publicada como artefato `diagrama-uml` em cada execucao do GitHub Actions; ela nao e versionada no repositorio. Abra a execucao na aba Actions para baixar o artefato. Para gerar a imagem localmente:
 
 ```powershell
 npm --prefix api run diagram
