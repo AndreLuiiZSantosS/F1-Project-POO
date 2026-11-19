@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@mermaid-js/mermaid-cli": "^11.17.1",
+    "@mermaid-js/mermaid-cli": "^12.2.0",
     "@stylistic/eslint-plugin": "^5.10.0",
     "eslint": "^10.14.0",
     "eslint-plugin-n": "^18.5.0",
