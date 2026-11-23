@@ -1,0 +1,32 @@
+rules:
+  - id: api-hardcoded-admin-fallback
+    languages:
+      - javascript
+    message: Configure admin credentials through the environment; never provide a predictable fallback.
+    metadata:
+      category: security
+      cwe: "CWE-798: Use of Hard-coded Credentials"
+    pattern-regex: process\.env\.(?:ADMIN_EMAIL|ADMIN_PASSWORD|ADMIN_KEY)\s*\|\|\s*["'][^"']+["']
+    severity: ERROR
+
+  - id: legacy-hardcoded-admin-bypass
+    languages:
+      - python
+    message: Do not grant administrator access through hardcoded credentials.
+    metadata:
+      category: security
+      cwe: "CWE-287: Improper Authentication"
+    pattern: |
+      if $USERNAME == "admin" and $PASSWORD == "admin":
+          ...
+    severity: ERROR
+
+  - id: password-in-console-log
+    languages:
+      - javascript
+    message: Do not print administrator passwords or other secrets to logs.
+    metadata:
+      category: security
+      cwe: "CWE-532: Insertion of Sensitive Information into Log File"
+    pattern-regex: (?i)console\.log\([^\n)]*(?:password|secret|token)[^\n)]*\)
+    severity: ERROR

@@ -14,19 +14,15 @@ class UI:
     @staticmethod
     def login():
         """Método para realizar o login."""
+        UI.is_admin = False
         username = input("Digite o nome de usuário: ")
         password = input("Digite a senha: ")
 
         cliente = View.cliente_autenticar(username, password)
 
-        if username == "admin" and password == "admin":
-            UI.is_admin = True
-            print("Login como administrador realizado com sucesso!")
-            return True
-        elif cliente is not None:
+        if cliente is not None:
             UI.cliente_id = cliente['id'] 
             UI.cliente_nome = cliente['nome']  
-            UI.is_admin = False
             print(f"Login como usuário comum realizado com sucesso. Bem-vindo, {cliente['nome']}!")
             return True
         else:
@@ -358,4 +354,5 @@ class UI:
             print("Operação cancelada.")
     
 
-UI.main()
+if __name__ == "__main__":
+    UI.main()

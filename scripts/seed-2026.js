@@ -1,5 +1,5 @@
 const { pointsForResult } = require("../shared/domain");
-const { DEFAULT_ADMIN_EMAIL, DEFAULT_ADMIN_PASSWORD } = require("../api/src/config");
+const { requiredAdminCredentials } = require("../api/src/config");
 const { hashPassword, normalizeEmail, nowIso } = require("../api/src/auth");
 const { writeDatabase } = require("../api/src/store");
 
@@ -275,12 +275,13 @@ function buildResults () {
 }
 
 async function main () {
+  const adminCredentials = requiredAdminCredentials();
   const admin = {
     id: 1,
     name: "Admin F1",
-    email: normalizeEmail(DEFAULT_ADMIN_EMAIL),
+    email: normalizeEmail(adminCredentials.email),
     role: "admin",
-    passwordHash: await hashPassword(DEFAULT_ADMIN_PASSWORD),
+    passwordHash: await hashPassword(adminCredentials.password),
     createdAt: nowIso(),
   };
   const results = buildResults();
@@ -310,7 +311,7 @@ async function main () {
 
   await writeDatabase(database);
   console.log(`Seed 2026 aplicado: ${teams.length} equipes, ${drivers.length} pilotos, ${events.length} etapas, ${results.length} resultados.`);
-  console.log(`Admin: ${DEFAULT_ADMIN_EMAIL} / ${DEFAULT_ADMIN_PASSWORD}`);
+  console.log(`Administrador configurado: ${adminCredentials.email}`);
 }
 
 main().catch((error) => {

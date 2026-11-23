@@ -8,9 +8,8 @@ const {
 } = require("../../shared/domain");
 const {
   DATA_FILE,
-  DEFAULT_ADMIN_EMAIL,
-  DEFAULT_ADMIN_PASSWORD,
   PORT,
+  requiredAdminCredentials,
 } = require("./config");
 const {
   createToken,
@@ -152,8 +151,8 @@ function cleanExpiredTokens (database) {
   database.authTokens = database.authTokens.filter((token) => Date.parse(token.expiresAt) >= now);
 }
 
-async function ensureDefaultAdmin (database) {
-  const email = normalizeEmail(DEFAULT_ADMIN_EMAIL);
+async function ensureConfiguredAdmin (database, credentials) {
+  const email = normalizeEmail(credentials.email);
   let user = database.users.find((item) => item.email === email);
 
   if (!user) {
@@ -162,7 +161,7 @@ async function ensureDefaultAdmin (database) {
       name: "Admin F1",
       email,
       role: "admin",
-      passwordHash: await hashPassword(DEFAULT_ADMIN_PASSWORD),
+      passwordHash: await hashPassword(credentials.password),
       createdAt: nowIso(),
     };
     database.users.push(user);
@@ -170,8 +169,8 @@ async function ensureDefaultAdmin (database) {
   }
 
   user.role = "admin";
-  if (!user.passwordHash) {
-    user.passwordHash = await hashPassword(DEFAULT_ADMIN_PASSWORD);
+  if (!user.passwordHash || !(await verifyPassword(credentials.password, user.passwordHash))) {
+    user.passwordHash = await hashPassword(credentials.password);
   }
   return user;
 }
@@ -704,13 +703,16 @@ async function handleAuthWrite (request, route, response) {
       cleanExpiredTokens(database);
       const email = normalizeEmail(payload.email);
       const password = cleanString(payload.password);
-      let user = database.users.find((item) => item.email === email);
+      const adminCredentials = requiredAdminCredentials();
+      let user;
 
-      if (!user && email === normalizeEmail(DEFAULT_ADMIN_EMAIL)) {
-        if (password !== DEFAULT_ADMIN_PASSWORD) {
+      if (email === normalizeEmail(adminCredentials.email)) {
+        if (password !== adminCredentials.password) {
           throw new HttpError(401, "Credenciais invalidas");
         }
-        user = await ensureDefaultAdmin(database);
+        user = await ensureConfiguredAdmin(database, adminCredentials);
+      } else {
+        user = database.users.find((item) => item.email === email);
       }
 
       if (!user || !(await verifyPassword(password, user.passwordHash))) {
@@ -848,7 +850,7 @@ async function handlePublicGet (request, route, response) {
     sendJson(response, 200, {
       statuses: RESULT_STATUSES,
       auth: {
-        adminEmail: DEFAULT_ADMIN_EMAIL,
+        adminEmail: requiredAdminCredentials().email,
       },
     });
     return;
@@ -1098,6 +1100,7 @@ async function requestHandler (request, response) {
 }
 
 if (require.main === module) {
+  requiredAdminCredentials();
   const server = http.createServer(requestHandler);
   server.listen(PORT, () => {
     console.log(`F1 Results API em http://127.0.0.1:${PORT}`);
