@@ -103,7 +103,7 @@ O pipeline instala o Semgrep CLI e executa as regras comunitarias de auditoria d
 Para executar localmente:
 
 ```powershell
-python -m pip install semgrep==1.186.0
+python -m pip install --only-binary=:all: semgrep==1.186.0
 $semgrepScripts = python -c "import sysconfig; print(sysconfig.get_path('scripts', 'nt_user'))"
 $env:PATH = "$semgrepScripts;$env:PATH"
 semgrep scan --config p/security-audit --config p/secrets --config .semgrep.yml --severity ERROR --error .
