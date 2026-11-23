@@ -25,7 +25,7 @@
     "eslint-plugin-n": "^18.5.0",
     "eslint-plugin-sonarjs": "^4.2.2",
     "globals": "^17.14.0",
-    "jscpd": "^4.0.5",
+    "jscpd": "^5.4.3",
     "npm-check-updates": "^23.1.1"
   }
 }
