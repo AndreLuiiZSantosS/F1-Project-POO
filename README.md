@@ -35,21 +35,20 @@ Depois abra:
 - Frontend: `http://127.0.0.1:5173`
 - API: `http://127.0.0.1:8000/api/health`
 
-## Login admin
+Antes de iniciar, configure `ADMIN_EMAIL` e `ADMIN_PASSWORD` no ambiente. Veja [Configuracao do administrador](#configuracao-do-administrador).
 
-Credenciais padrao locais:
+## Configuracao do administrador
 
-- Email: `admin@f1.local`
-- Senha: `admin-f1-2026`
-
-Para trocar:
+A API nao possui credenciais padrao. Defina `ADMIN_EMAIL` e `ADMIN_PASSWORD` no ambiente antes de iniciar a API ou gerar os dados iniciais:
 
 ```powershell
-$env:ADMIN_EMAIL="seu-email@exemplo.com"
-$env:ADMIN_PASSWORD="sua-senha"
+$env:ADMIN_EMAIL = "<email-do-administrador>"
+$env:ADMIN_PASSWORD = "<segredo-forte>"
 node scripts/seed-2026.js
 node api/src/server.js
 ```
+
+O seed nao imprime a senha. Guarde os valores em um gerenciador de segredos e nao os versione.
 
 Usuario comum pode criar conta em `/registro`, ver resultados e criar previsoes. Apenas admin ve e usa as rotas de cadastro.
 
@@ -96,6 +95,19 @@ npm --prefix api run diagram
 ```
 
 O pipeline tambem executa esse comando a cada push e pull request.
+
+## Analise estatica de seguranca
+
+O pipeline instala o Semgrep CLI e executa as regras comunitarias de auditoria de seguranca/segredos e as regras locais em `.semgrep.yml`. A verificacao bloqueia achados de severidade `ERROR`, incluindo fallback de credenciais administrativas, bypass de autenticacao por credencial fixa e registro de senha em logs.
+
+Para executar localmente:
+
+```powershell
+python -m pip install semgrep==1.186.0
+$semgrepScripts = python -c "import sysconfig; print(sysconfig.get_path('scripts', 'nt_user'))"
+$env:PATH = "$semgrepScripts;$env:PATH"
+semgrep scan --config p/security-audit --config p/secrets --config .semgrep.yml --severity ERROR --error .
+```
 
 Para atualizar dependencias npm dentro da faixa suportada pelo Node do projeto:
 

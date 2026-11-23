@@ -21,7 +21,7 @@ const database = {
     { id: 2, eventId: 1, sessionType: "RACE", driverId: 2, position: 2, status: "CLASSIFIED", points: 18 },
   ],
   users: [
-    { id: 1, name: "Admin F1", email: "admin@f1.local", role: "admin" },
+    { id: 1, name: "Admin F1", email: "admin@example.test", role: "admin" },
     { id: 2, name: "Player", email: "player@f1.local", role: "user" },
   ],
   predictions: [

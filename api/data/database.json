@@ -2762,23 +2762,7 @@
       "notes": "Resultado sprint oficial F1 2026 seedado manualmente."
     }
   ],
-  "users": [
-    {
-      "id": 1,
-      "name": "Admin F1",
-      "email": "admin@f1.local",
-      "role": "admin",
-      "passwordHash": "scrypt:14b4660967b44067b8938c9cd8ee391a:74816cdfd076facad1b88dea6b93857013d84eb8310f4a5e5b72cd1a3a0a3cd7bc24f54cd4a6ce9e6b8e9d763ce2beedfd31a6840a904e30928e55d4717757b5",
-      "createdAt": "2026-08-23T23:20:40.216Z"
-    }
-  ],
-  "authTokens": [
-    {
-      "token": "851ec4cc3c514475f02da46bfeae8378448138812d58ff6a68fe5890db24a0cc",
-      "userId": 1,
-      "createdAt": "2026-08-23T23:38:37.862Z",
-      "expiresAt": "2026-08-30T23:38:37.862Z"
-    }
-  ],
+  "users": [],
+  "authTokens": [],
   "predictions": []
 }

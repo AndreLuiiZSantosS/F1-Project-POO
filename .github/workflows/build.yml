@@ -17,6 +17,20 @@ jobs:
         cache: npm
         cache-dependency-path: api/package-lock.json
 
+    - name: Configurar Python para Semgrep
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+
+    - name: Instalar Semgrep
+      run: python -m pip install --disable-pip-version-check semgrep==1.186.0
+
+    - name: Detectar vulnerabilidades estaticas
+      run: semgrep scan --config p/security-audit --config p/secrets --config .semgrep.yml --severity ERROR --error .
+
+    - name: Testar autenticacao legada
+      run: python -m unittest discover -s F1_project/tests
+
     - name: Instalar dependencias
       working-directory: api
       run: npm ci
@@ -51,4 +65,3 @@ jobs:
     - name: Executar testes
       working-directory: api
       run: npm test
-
